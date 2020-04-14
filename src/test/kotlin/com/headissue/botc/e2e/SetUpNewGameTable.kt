@@ -15,8 +15,6 @@ open class SetUpNewGameTable : Performable {
         the(".App"), isVisible()))
         .orComplainWith(CantAccessFrontend::class.java, "local fe running?"))
     actor.attemptsTo(Open.browserOn(DebugGameTable()))
-    actor.should(eventually(seeThat(the(".grimoire"), isVisible())))
-    actor.should(eventually(seeThat(the(".noPlayers"), isVisible())))
   }
 
 }
