@@ -56,12 +56,19 @@ class BotcHappyPathIT {
 
   @Test
   fun `when storyteller starts first night, characters are randomly assigned`() {
-    `when storyteller opens a new table, table is without players`()
     `when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
+    storyTeller.should(eventually(seeThat(ItIsNight(), `is`(true))))
     storyTeller.should(seeThat(CharactersInPlay(), IsIterableContainingInOrder.contains(
         "Slayer", "Librarian", "Spy", "Imp", "Empath"
     )))
+  }
+
+  @Test
+  fun `when storyteller starts first day, it is daytime`() {
+    `when storyteller starts first night, characters are randomly assigned`()
+    storyTeller.attemptsTo(StartNextDay())
+    storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
   }
 
 }
