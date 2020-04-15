@@ -60,7 +60,7 @@ class BotcHappyPathIT {
     `when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
     storyTeller.should(seeThat(CharactersInPlay(), IsIterableContainingInOrder.contains(
-        "Imp"
+        "Slayer", "Librarian", "Spy", "Imp", "Empath"
     )))
   }
 
