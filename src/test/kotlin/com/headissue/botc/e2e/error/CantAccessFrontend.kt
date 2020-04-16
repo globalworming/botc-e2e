@@ -1,4 +1,4 @@
-package com.headissue.botc.e2e
+package com.headissue.botc.e2e.error
 
 class CantAccessFrontend : CompromisedTest {
 

@@ -1,5 +1,8 @@
-package com.headissue.botc.e2e
+package com.headissue.botc.e2e.action
 
+import com.headissue.botc.e2e.error.CantAccessFrontend
+import com.headissue.botc.e2e.page.DebugGameTable
+import com.headissue.botc.e2e.page.Root
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
 import net.serenitybdd.screenplay.GivenWhenThen.seeThat

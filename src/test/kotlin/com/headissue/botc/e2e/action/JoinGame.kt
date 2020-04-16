@@ -1,4 +1,4 @@
-package com.headissue.botc.e2e
+package com.headissue.botc.e2e.action
 
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable

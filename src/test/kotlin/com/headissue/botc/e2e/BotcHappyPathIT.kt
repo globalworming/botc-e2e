@@ -1,6 +1,11 @@
 package com.headissue.botc.e2e
 
 import com.github.javafaker.Faker
+import com.headissue.botc.e2e.action.*
+import com.headissue.botc.e2e.question.CharactersInPlay
+import com.headissue.botc.e2e.question.ItIsDay
+import com.headissue.botc.e2e.question.ItIsNight
+import com.headissue.botc.e2e.question.PlayersAtTable
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually

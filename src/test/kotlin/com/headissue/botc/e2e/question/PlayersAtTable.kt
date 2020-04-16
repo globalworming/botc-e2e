@@ -1,4 +1,4 @@
-package com.headissue.botc.e2e
+package com.headissue.botc.e2e.question
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
