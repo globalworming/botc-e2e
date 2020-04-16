@@ -1,11 +1,10 @@
 package com.headissue.botc.e2e
 
 import com.github.javafaker.Faker
+import com.headissue.botc.e2e.ability.SeeGrimoire
+import com.headissue.botc.e2e.ability.SeeTownsquare
 import com.headissue.botc.e2e.action.*
-import com.headissue.botc.e2e.question.CharactersInPlay
-import com.headissue.botc.e2e.question.ItIsDay
-import com.headissue.botc.e2e.question.ItIsNight
-import com.headissue.botc.e2e.question.PlayersAtTable
+import com.headissue.botc.e2e.question.*
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
@@ -37,9 +36,12 @@ class BotcHappyPathIT {
       .java).driver))
   val faker = Faker()
   val players = generateSequence { mockedRemoteActorsCast.actorNamed(faker.gameOfThrones().character()) }.take(20).toList()
+  private fun fivePlayers() = players.stream().limit(5)
 
   @Before
   fun setUp() {
+    storyTeller.can(SeeGrimoire())
+    players.forEach { it.can(SeeTownsquare()) }
   }
 
   @Test
@@ -53,11 +55,38 @@ class BotcHappyPathIT {
   fun `when players join a table, the storyteller sees players have joined`() {
     `when storyteller opens a new table, table is without players`()
     // not very readable.. can we make it fivePlayers.attemptTo(JoinGame()) ?
-    players.stream().limit(5).forEach {
+    fivePlayers().forEach {
       it.attemptsTo(JoinGame())
     }
     storyTeller.should(seeThat(CountQuestion(PlayersAtTable()), `is`(5)))
   }
+
+
+  @Test
+  fun `when storyteller starts first night, players can see the townsquare`() {
+    `when players join a table, the storyteller sees players have joined`()
+    storyTeller.attemptsTo(StartFirstNight())
+    players[3].attemptsTo(EnsureInitialTownSquareIsDisplayed())
+  }
+
+  @Test
+  fun `as storyteller progresses the story, players can see the updated townsquare`() {
+    `when players join a table, the storyteller sees players have joined`()
+    storyTeller.attemptsTo(StartFirstNight())
+    storyTeller.attemptsTo(StartNextDay())
+    storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
+    fivePlayers().forEach { it.should(eventually(seeThat(ItIsDay(), `is`(true)))) }
+
+    storyTeller.attemptsTo(KillPlayer(players[1].name))
+    players[2].should(eventually(seeThat(PlayerIsDead(players[1].name), `is`(true))))
+    players[2].should(eventually(seeThat(PlayerHasNotUsedVote(players[1].name), `is`(true))))
+
+    storyTeller.attemptsTo(KillPlayer(players[2].name))
+    storyTeller.attemptsTo(MarkPlayerUsedVote(players[2].name))
+    players[1].should(eventually(seeThat(PlayerIsDead(players[2].name), `is`(true))))
+    players[1].should(eventually(seeThat(PlayerHasUsedVote(players[2].name), `is`(true))))
+  }
+
 
   @Test
   fun `when storyteller starts first night, characters are randomly assigned`() {
