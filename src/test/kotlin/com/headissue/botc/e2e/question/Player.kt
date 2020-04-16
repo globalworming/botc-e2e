@@ -8,7 +8,7 @@ import net.serenitybdd.screenplay.targets.Target
 class Player(val name: String) : QuestionWithDefaultSubject<WebElementFacade>() {
   override fun answeredBy(actor: Actor): WebElementFacade {
 
-    var boardOrGrimoire = if (actor.abilityTo(SeeGrimoire::class.java) != null) ".grimoire" else ".townsquare"
+    var boardOrGrimoire = if (actor.abilityTo(SeeGrimoire::class.java) != null) ".grimoire" else ".townSquare"
     return Target.the("player named " + name)
         .locatedBy(boardOrGrimoire + " .player")
         .resolveAllFor(actor).stream()

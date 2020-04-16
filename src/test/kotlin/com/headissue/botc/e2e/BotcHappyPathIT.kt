@@ -2,7 +2,7 @@ package com.headissue.botc.e2e
 
 import com.github.javafaker.Faker
 import com.headissue.botc.e2e.ability.SeeGrimoire
-import com.headissue.botc.e2e.ability.SeeTownsquare
+import com.headissue.botc.e2e.ability.SeeTownSquare
 import com.headissue.botc.e2e.action.*
 import com.headissue.botc.e2e.question.*
 import net.serenitybdd.junit.runners.SerenityRunner
@@ -35,13 +35,13 @@ class BotcHappyPathIT {
   val mockedRemoteActorsCast = Cast.whereEveryoneCan(BrowseTheWeb.with(storyTeller.abilityTo(BrowseTheWeb::class
       .java).driver))
   val faker = Faker()
-  val players = generateSequence { mockedRemoteActorsCast.actorNamed(faker.gameOfThrones().character()) }.take(20).toList()
-  private fun fivePlayers() = players.stream().limit(5)
+  val players = generateSequence { mockedRemoteActorsCast.actorNamed(faker.gameOfThrones().character()) }
+      .take(5).toList()
 
   @Before
   fun setUp() {
     storyTeller.can(SeeGrimoire())
-    players.forEach { it.can(SeeTownsquare()) }
+    players.forEach { it.can(SeeTownSquare()) }
   }
 
   @Test
@@ -55,7 +55,7 @@ class BotcHappyPathIT {
   fun `when players join a table, the storyteller sees players have joined`() {
     `when storyteller opens a new table, table is without players`()
     // not very readable.. can we make it fivePlayers.attemptTo(JoinGame()) ?
-    fivePlayers().forEach {
+    players.forEach {
       it.attemptsTo(JoinGame())
     }
     storyTeller.should(seeThat(CountQuestion(PlayersAtTable()), `is`(5)))
@@ -63,19 +63,19 @@ class BotcHappyPathIT {
 
 
   @Test
-  fun `when storyteller starts first night, players can see the townsquare`() {
+  fun `when storyteller starts first night, players can see the town square`() {
     `when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
     players[3].attemptsTo(EnsureInitialTownSquareIsDisplayed())
   }
 
   @Test
-  fun `as storyteller progresses the story, players can see the updated townsquare`() {
+  fun `as storyteller progresses the story, players can see the updated town square`() {
     `when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
     storyTeller.attemptsTo(StartNextDay())
     storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
-    fivePlayers().forEach { it.should(eventually(seeThat(ItIsDay(), `is`(true)))) }
+    players.forEach { it.should(eventually(seeThat(ItIsDay(), `is`(true)))) }
 
     storyTeller.attemptsTo(KillPlayer(players[1].name))
     players[2].should(eventually(seeThat(PlayerIsDead(players[1].name), `is`(true))))

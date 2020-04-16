@@ -14,7 +14,7 @@ import org.hamcrest.CoreMatchers.`is`
 
 open class EnsureInitialTownSquareIsDisplayed : Performable {
   override fun <T : Actor> performAs(actor: T) {
-    actor.should(eventually(seeThat(the(".townsquare"), isVisible())))
+    actor.should(eventually(seeThat(the(".townSquare"), isVisible())))
     // TODO actor.should(eventually(seeThat(the(".townsquare .players.me"), isVisible())))
     actor.should(eventually(seeThat(CountQuestion(PlayersAtTable()), `is`(5))))
     actor.should(eventually(seeThat(EveryoneIsAlive(), `is`(true))))

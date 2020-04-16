@@ -8,7 +8,7 @@ import net.serenitybdd.screenplay.questions.WebElementQuestion
 
 class EveryoneIsAlive : QuestionWithDefaultSubject<Boolean>() {
   override fun answeredBy(actor: Actor): Boolean {
-    actor.should(eventually(seeThat(WebElementQuestion.the(".townsquare .dead"), isNotVisible())))
+    actor.should(eventually(seeThat(WebElementQuestion.the(".townSquare .dead"), isNotVisible())))
     return true
   }
 
