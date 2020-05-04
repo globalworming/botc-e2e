@@ -1,11 +1,13 @@
 package com.headissue.botc.e2e
 
 import com.github.javafaker.Faker
+import com.headissue.botc.e2e.ability.AccessMockGameTable
 import com.headissue.botc.e2e.ability.SeeGrimoire
 import com.headissue.botc.e2e.ability.SeeTownSquare
 import com.headissue.botc.e2e.action.*
 import com.headissue.botc.e2e.question.*
 import net.serenitybdd.junit.runners.SerenityRunner
+import net.serenitybdd.screenplay.Ability
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
 import net.serenitybdd.screenplay.GivenWhenThen.seeThat
@@ -25,23 +27,19 @@ import org.junit.runner.RunWith
 @RunWith(SerenityRunner::class)
 class BotcHappyPathIT {
 
-  val onlineCast = OnlineCast()
+  // FIXME get from env
+  var onWhatStageShouldWePlay = MyStage.LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS
 
-  val storyTeller: Actor = onlineCast.actorNamed("storyTeller")
-  /*
-    mocked remote actions are performed by the storyteller itself through the frontend, that's why players use the same
-    driver
-  */
-  val mockedRemoteActorsCast = Cast.whereEveryoneCan(BrowseTheWeb.with(storyTeller.abilityTo(BrowseTheWeb::class
-      .java).driver))
-  val faker = Faker()
-  val players = generateSequence { mockedRemoteActorsCast.actorNamed(faker.gameOfThrones().character()) }
-      .take(5).toList()
+  lateinit var storyTeller: Actor
+  lateinit var players: GroupOfActors
 
   @Before
   fun setUp() {
+    val actors = MyActors.forStage(onWhatStageShouldWePlay)
+    storyTeller = actors.storyTeller
+    players = actors.players
     storyTeller.can(SeeGrimoire())
-    players.forEach { it.can(SeeTownSquare()) }
+    players.can(SeeTownSquare())
   }
 
   @Test
@@ -105,4 +103,71 @@ class BotcHappyPathIT {
     storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
   }
 
+}
+
+class MyActors(val storyTeller: Actor, val players: GroupOfActors) {
+
+  companion object {
+
+    val faker = Faker()
+
+    fun forStage(stage: MyStage): MyActors {
+      return if (stage == MyStage.LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS) {
+        val onlineCast = OnlineCast()
+        val storyTeller = onlineCast.actorNamed("storyteller");
+        val driver = storyTeller.abilityTo(BrowseTheWeb::class.java).driver
+        /*
+         mocked remote actions are performed by the storyteller itself through the frontend, that's why players use the same
+         driver
+       */
+        val mockedRemoteActorsCast = Cast.whereEveryoneCan(BrowseTheWeb.with(driver))
+        val players = GroupOfActors()
+        generateSequence { mockedRemoteActorsCast.actorNamed(faker.gameOfThrones().character()) }
+            .take(5).forEach { players.add(it) }
+        storyTeller.can(AccessMockGameTable())
+        players.can(AccessMockGameTable())
+        MyActors(storyTeller, players)
+      } else {
+        val onlineCast = OnlineCast()
+        val storyTeller = onlineCast.actorNamed("storyteller")
+        val players = GroupOfActors()
+        generateSequence { onlineCast.actorNamed(faker.gameOfThrones().character()) }
+            .take(5).forEach { players.add(it) }
+        MyActors(storyTeller, players)
+      }
+    }
+  }
+
+}
+
+enum class MyStage { LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS }
+
+class GroupOfActors: AbstractMutableList<Actor>() {
+
+  private var actors: MutableList<Actor> = mutableListOf()
+
+  fun <T: Ability> can(doSomething: T) {
+    forEach { it.can(doSomething) }
+  }
+
+  override val size: Int
+    get() = actors.size
+
+  override fun add(element: Actor): Boolean = actors.add(element)
+
+  override fun iterator(): MutableIterator<Actor> = actors.iterator()
+
+  override fun get(index: Int): Actor = actors[index]
+
+  override fun add(index: Int, element: Actor) {
+    TODO("Not yet implemented")
+  }
+
+  override fun removeAt(index: Int): Actor {
+    TODO("Not yet implemented")
+  }
+
+  override fun set(index: Int, element: Actor): Actor {
+    TODO("Not yet implemented")
+  }
 }
