@@ -19,7 +19,9 @@ import net.serenitybdd.screenplay.actors.OnlineCast
 import net.serenitybdd.screenplay.questions.CountQuestion
 import net.serenitybdd.screenplay.rest.abilities.CallAnApi
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.collection.IsIterableContainingInOrder
+import org.junit.Assume
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -91,6 +93,7 @@ class BotcHappyPathIT {
 
   @Test
   fun `when storyteller starts first night, characters are randomly assigned`() {
+    Assume.assumeThat(onWhatStageShouldWePlay, anyOf(`is`(MyStage.LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)))
     `when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
     storyTeller.should(eventually(seeThat(ItIsNight(), `is`(true))))
@@ -101,7 +104,8 @@ class BotcHappyPathIT {
 
   @Test
   fun `when storyteller starts first day, it is daytime`() {
-    `when storyteller starts first night, characters are randomly assigned`()
+    `when players join a table, the storyteller sees players have joined`()
+    storyTeller.attemptsTo(StartFirstNight())
     storyTeller.attemptsTo(StartNextDay())
     storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
   }
