@@ -38,7 +38,7 @@ open class SetUpNewGameTable : Performable {
       return
     }
 
-    throw NoMatchingAbilityException(this::class.simpleName)
+    throw NoMatchingAbilityException(actor.name)
   }
 
 }

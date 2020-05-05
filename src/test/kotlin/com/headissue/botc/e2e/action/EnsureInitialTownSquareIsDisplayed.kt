@@ -10,10 +10,10 @@ import net.serenitybdd.screenplay.questions.CountQuestion
 import org.hamcrest.CoreMatchers.`is`
 
 open class EnsureInitialTownSquareIsDisplayed : Performable {
-  override fun <T : Actor> performAs(actor: T) = actor.should(
-      seeThat(CountQuestion(PlayersAtTable()), `is`(5)),
-      seeThat(EveryoneIsAlive(), `is`(true)),
-      seeThat(ItIsNight(), `is`(true))
-  )
+  override fun <T : Actor> performAs(actor: T) {
+    actor.should(seeThat(CountQuestion(PlayersAtTable()), `is`(5)))
+    actor.should(seeThat(EveryoneIsAlive(), `is`(true)))
+    actor.should(seeThat(ItIsNight(), `is`(true)))
+  }
 
 }

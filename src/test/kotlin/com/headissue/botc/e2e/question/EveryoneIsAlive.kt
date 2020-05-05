@@ -3,16 +3,13 @@ package com.headissue.botc.e2e.question
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import net.serenitybdd.screenplay.Actor
-import net.serenitybdd.screenplay.EventualConsequence.eventually
-import net.serenitybdd.screenplay.GivenWhenThen.seeThat
 import net.serenitybdd.screenplay.NoMatchingAbilityException
-import net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isNotVisible
-import net.serenitybdd.screenplay.questions.WebElementQuestion
+import net.serenitybdd.screenplay.questions.Presence
 
 class EveryoneIsAlive : QuestionWithDefaultSubject<Boolean>() {
   override fun answeredBy(actor: Actor): Boolean {
     if (actor.abilityTo(AccessLocalFrontendMockGameTable::class.java) != null) {
-      actor.should(eventually(seeThat(WebElementQuestion.the(".townSquare .dead"), isNotVisible())))
+      return !Presence.of(".townSquare .dead").viewedBy(actor).asBoolean()
     }
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {

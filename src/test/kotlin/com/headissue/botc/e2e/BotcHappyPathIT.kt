@@ -75,16 +75,17 @@ class BotcHappyPathIT {
     storyTeller.attemptsTo(StartFirstNight())
     storyTeller.attemptsTo(StartNextDay())
     storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
-    players.forEach { it.should(eventually(seeThat(ItIsDay(), `is`(true)))) }
+    players[3].should(eventually(seeThat(ItIsDay(), `is`(true))))
 
+    storyTeller.should(eventually(seeThat(PlayerIsDead(players[1].name), `is`(false))))
     storyTeller.attemptsTo(KillPlayer(players[1].name))
-    players[2].should(eventually(seeThat(PlayerIsDead(players[1].name), `is`(true))))
-    players[2].should(eventually(seeThat(PlayerHasNotUsedVote(players[1].name), `is`(true))))
+    storyTeller.should(eventually(seeThat(PlayerIsDead(players[1].name), `is`(true))))
+    storyTeller.should(eventually(seeThat(PlayerCanVote(players[1].name), `is`(true))))
 
     storyTeller.attemptsTo(KillPlayer(players[2].name))
     storyTeller.attemptsTo(MarkPlayerUsedVote(players[2].name))
     players[1].should(eventually(seeThat(PlayerIsDead(players[2].name), `is`(true))))
-    players[1].should(eventually(seeThat(PlayerHasUsedVote(players[2].name), `is`(true))))
+    players[1].should(eventually(seeThat(PlayerCanVote(players[2].name), `is`(false))))
   }
 
 

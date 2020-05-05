@@ -1,7 +1,7 @@
 package com.headissue.botc.e2e.action
 
-import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
+import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.actor.Memories
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
@@ -12,8 +12,6 @@ import net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible
 import net.serenitybdd.screenplay.questions.WebElementQuestion
 import net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.not
-import org.hamcrest.Matchers.isEmptyString
 
 open class EnsureEmptyTableIsPresent : Performable {
   override fun <T : Actor> performAs(actor: T) {
@@ -34,7 +32,7 @@ open class EnsureEmptyTableIsPresent : Performable {
 
     }
 
-    throw NoMatchingAbilityException(this::class.simpleName)
+    throw NoMatchingAbilityException(actor.name)
   }
 
 }

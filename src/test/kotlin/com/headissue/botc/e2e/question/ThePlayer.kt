@@ -1,18 +1,15 @@
 package com.headissue.botc.e2e.question
 
-import com.headissue.botc.e2e.ability.SeeGrimoire
-import net.serenitybdd.core.pages.WebElementFacade
+import com.headissue.botc.e2e.model.Player
 import net.serenitybdd.screenplay.Actor
-import net.serenitybdd.screenplay.targets.Target
+import java.util.*
+import kotlin.NoSuchElementException
 
-class ThePlayer(val name: String) : QuestionWithDefaultSubject<WebElementFacade>() {
-  override fun answeredBy(actor: Actor): WebElementFacade {
-
-    var boardOrGrimoire = if (actor.abilityTo(SeeGrimoire::class.java) != null) ".grimoire" else ".townSquare"
-    return Target.the("player named " + name)
-        .locatedBy(boardOrGrimoire + " .player")
-        .resolveAllFor(actor).stream()
-        .filter { it.textContent.contains(name) }.findFirst().get()
+class ThePlayer(val name: String) : QuestionWithDefaultSubject<Player>() {
+  override fun answeredBy(actor: Actor): Player {
+    val players = actor.asksFor(PlayersAtTable())
+    val player = Optional.ofNullable(players.find { it.name == name })
+    return player.orElseThrow { NoSuchElementException() }
   }
 
 }

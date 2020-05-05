@@ -23,7 +23,7 @@ open class StartFirstNight : Performable {
       return actor.should(seeThatResponse { it.statusCode(SC_OK) })
     }
 
-    throw NoMatchingAbilityException(this::class.simpleName)
+    throw NoMatchingAbilityException(actor.name)
 
   }
 

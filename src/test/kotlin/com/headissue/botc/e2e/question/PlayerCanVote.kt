@@ -1,14 +1,14 @@
 package com.headissue.botc.e2e.question
 
-import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.annotations.Subject
 
-class PlayerHasNotUsedVote(val name: String) : QuestionWithDefaultSubject<Boolean>() {
+class PlayerCanVote(val name: String) : QuestionWithDefaultSubject<Boolean>() {
 
   @Subject("player '#name' can still vote")
   override fun answeredBy(actor: Actor): Boolean {
-    return actor.asksFor(ThePlayer(name)).thenFind<WebElementFacade>(".canVote").isVisible
+    return actor.asksFor(ThePlayer(name)).canVote
+
   }
 
 }
