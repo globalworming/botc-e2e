@@ -2,6 +2,7 @@ package com.headissue.botc.e2e.actor
 
 import com.github.javafaker.Faker
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
+import com.headissue.botc.e2e.ability.AccessLocalIntegratedFrontend
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.actor.Stages.*
 import net.serenitybdd.screenplay.Actor
@@ -9,13 +10,11 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.actors.Cast
 import net.serenitybdd.screenplay.actors.OnlineCast
 import net.serenitybdd.screenplay.rest.abilities.CallAnApi
-import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.core.ThucydidesSystemProperty
 
 class Actors(val storyTeller: Actor, val players: GroupOfActors) {
 
   companion object {
-
-    internal var environmentVariables: EnvironmentVariables? = null
 
     private val faker = Faker()
 
@@ -45,11 +44,14 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
           Actors(storyTeller, players)
         }
         LOCAL_FRONTEND_INTEGRATED -> {
-          environmentVariables!!.setProperty("webdriver.base.url", "http://localhost:3000")
+          System.setProperty(ThucydidesSystemProperty.WEBDRIVER_BASE_URL.preferredName(), "http://localhost:3000")
           val cast = OnlineCast()
           val storyTeller = cast.actorNamed("storyteller")
           val players = players(cast)
-          cast.actors.forEach { it.remember(Memories.TABLE_NAME, tableName) }
+          cast.actors.forEach {
+            it.remember(Memories.TABLE_NAME, tableName)
+            it.can(AccessLocalIntegratedFrontend())
+          }
           Actors(storyTeller, players)
         }
       }
