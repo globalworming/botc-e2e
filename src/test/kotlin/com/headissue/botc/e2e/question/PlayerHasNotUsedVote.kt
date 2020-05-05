@@ -8,7 +8,7 @@ class PlayerHasNotUsedVote(val name: String) : QuestionWithDefaultSubject<Boolea
 
   @Subject("player '#name' can still vote")
   override fun answeredBy(actor: Actor): Boolean {
-    return actor.asksFor(Player(name)).thenFind<WebElementFacade>(".canVote").isVisible
+    return actor.asksFor(ThePlayer(name)).thenFind<WebElementFacade>(".canVote").isVisible
   }
 
 }

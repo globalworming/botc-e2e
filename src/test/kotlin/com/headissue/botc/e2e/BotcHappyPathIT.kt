@@ -2,7 +2,7 @@ package com.headissue.botc.e2e
 
 import com.github.javafaker.Faker
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
-import com.headissue.botc.e2e.ability.AccesLocalRestAPI
+import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.ability.SeeGrimoire
 import com.headissue.botc.e2e.ability.SeeTownSquare
 import com.headissue.botc.e2e.action.*
@@ -13,7 +13,6 @@ import net.serenitybdd.screenplay.Ability
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
 import net.serenitybdd.screenplay.GivenWhenThen.seeThat
-import net.serenitybdd.screenplay.NoMatchingAbilityException
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.actors.Cast
 import net.serenitybdd.screenplay.actors.OnlineCast
@@ -136,12 +135,13 @@ class MyActors(val storyTeller: Actor, val players: GroupOfActors) {
         }
 
         MyStage.LOCAL_REST_API -> {
-          val cast = Cast.whereEveryoneCan(CallAnApi.at("http://localhost:8080"), AccesLocalRestAPI())
+          val cast = Cast.whereEveryoneCan(CallAnApi.at("http://localhost:8080"), AccessLocalRestAPI())
           val storyTeller = cast.actorNamed("storyteller")
           val players = GroupOfActors()
           generateSequence { cast.actorNamed(faker.gameOfThrones().character()) }
               .take(5).forEach { players.add(it) }
-          cast.actors.forEach { it.remember(Memories.TABLE_NAME, faker.rickAndMorty().character()) }
+          val tableName = faker.name().firstName()
+          cast.actors.forEach { it.remember(Memories.TABLE_NAME, tableName) }
           MyActors(storyTeller, players)
         }
       }

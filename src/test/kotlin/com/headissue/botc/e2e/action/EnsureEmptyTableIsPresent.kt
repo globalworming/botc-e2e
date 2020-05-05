@@ -1,6 +1,6 @@
 package com.headissue.botc.e2e.action
 
-import com.headissue.botc.e2e.ability.AccesLocalRestAPI
+import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.actor.Memories
 import net.serenitybdd.screenplay.Actor
@@ -24,10 +24,10 @@ open class EnsureEmptyTableIsPresent : Performable {
       )
     }
 
-    if (actor.abilityTo(AccesLocalRestAPI::class.java) != null) {
+    if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
+      actor.attemptsTo(GetTableInfo())
       actor.should(
-          seeThatResponse { it.body("uuid", not(isEmptyString())) },
-          seeThatResponse { it.body("name", `is`(actor.recall(Memories.TABLE_NAME) as String)) },
+          seeThatResponse { it.body("id", `is`(actor.recall(Memories.TABLE_NAME) as String)) },
           seeThatResponse { it.body("players.size()", `is`(0)) }
       )
       return

@@ -8,7 +8,7 @@ class PlayerHasUsedVote(val name: String) : QuestionWithDefaultSubject<Boolean>(
 
   @Subject("player '#name' has used vote")
   override fun answeredBy(actor: Actor): Boolean {
-    return actor.asksFor(Player(name)).thenFind<WebElementFacade>(".usedVote").isVisible
+    return actor.asksFor(ThePlayer(name)).thenFind<WebElementFacade>(".usedVote").isVisible
   }
 
 }

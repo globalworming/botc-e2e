@@ -8,7 +8,7 @@ class PlayerIsDead(val name: String) : QuestionWithDefaultSubject<Boolean>() {
 
   @Subject("player is dead: #name")
   override fun answeredBy(actor: Actor): Boolean {
-    return actor.asksFor(Player(name)).thenFind<WebElementFacade>(".dead").isVisible
+    return actor.asksFor(ThePlayer(name)).thenFind<WebElementFacade>(".dead").isVisible
   }
 
 }
