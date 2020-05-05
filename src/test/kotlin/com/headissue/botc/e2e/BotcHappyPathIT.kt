@@ -5,7 +5,8 @@ import com.headissue.botc.e2e.ability.SeeTownSquare
 import com.headissue.botc.e2e.action.*
 import com.headissue.botc.e2e.actor.Actors
 import com.headissue.botc.e2e.actor.GroupOfActors
-import com.headissue.botc.e2e.actor.Stages
+import com.headissue.botc.e2e.actor.Stages.LOCAL_FRONTEND_INTEGRATED
+import com.headissue.botc.e2e.actor.Stages.LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS
 import com.headissue.botc.e2e.question.*
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor
@@ -25,9 +26,10 @@ import org.junit.runner.RunWith
 class BotcHappyPathIT {
 
   // FIXME get from env
-  //var onWhatStageShouldWePlay = MyStage.LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS
-  // var onWhatStageShouldWePlay = Stages.LOCAL_REST_API
-  var onWhatStageShouldWePlay = Stages.LOCAL_FRONTEND_INTEGRATED
+  var onWhatStageShouldWePlay =
+      //LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS
+      //LOCAL_REST_API
+      LOCAL_FRONTEND_INTEGRATED
 
   lateinit var storyTeller: Actor
   lateinit var players: GroupOfActors
@@ -87,7 +89,7 @@ class BotcHappyPathIT {
 
   @Test
   fun `when storyteller starts first night, characters are randomly assigned`() {
-    Assume.assumeThat(onWhatStageShouldWePlay, anyOf(`is`(Stages.LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)))
+    Assume.assumeThat(onWhatStageShouldWePlay, anyOf(`is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)))
     `when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
     storyTeller.should(eventually(seeThat(ItIsNight(), `is`(true))))
