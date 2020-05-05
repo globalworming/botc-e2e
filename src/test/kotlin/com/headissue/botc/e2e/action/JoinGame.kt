@@ -4,11 +4,11 @@ import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.actor.Memories
 import net.serenitybdd.screenplay.Actor
+import net.serenitybdd.screenplay.NoMatchingAbilityException
 import net.serenitybdd.screenplay.Performable
 import net.serenitybdd.screenplay.actions.Enter
 import net.serenitybdd.screenplay.rest.interactions.Post
 import net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse
-import org.apache.http.HttpStatus.SC_CREATED
 import org.apache.http.HttpStatus.SC_OK
 import org.openqa.selenium.Keys
 
@@ -24,6 +24,8 @@ open class JoinGame : Performable {
           .with { it.param("name", actor.name) })
       return actor.should(seeThatResponse { it.statusCode(SC_OK) })
     }
+
+    throw NoMatchingAbilityException(this::class.simpleName)
   }
 
 }

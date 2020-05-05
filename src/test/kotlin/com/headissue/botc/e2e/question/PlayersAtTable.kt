@@ -3,7 +3,6 @@ package com.headissue.botc.e2e.question
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.action.GetTableInfo
-import com.headissue.botc.e2e.actor.Memories
 import com.headissue.botc.e2e.model.Player
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
@@ -24,7 +23,7 @@ class PlayersAtTable : QuestionWithDefaultSubject<List<Player>>() {
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
       actor.attemptsTo(GetTableInfo())
-      return actor.asksFor(LastResponse()).jsonPath().getList("players")
+      return actor.asksFor(LastResponse()).jsonPath().getList("players", Player::class.java)
     }
 
     throw NoMatchingAbilityException(actor.name)
