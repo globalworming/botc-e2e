@@ -2,6 +2,7 @@ package com.headissue.botc.e2e.action
 
 import com.headissue.botc.e2e.ability.AccesLocalRestAPI
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
+import com.headissue.botc.e2e.actor.Memories
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
 import net.serenitybdd.screenplay.GivenWhenThen.seeThat
@@ -11,6 +12,8 @@ import net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible
 import net.serenitybdd.screenplay.questions.WebElementQuestion
 import net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.not
+import org.hamcrest.Matchers.isEmptyString
 
 open class EnsureEmptyTableIsPresent : Performable {
   override fun <T : Actor> performAs(actor: T) {
@@ -23,7 +26,8 @@ open class EnsureEmptyTableIsPresent : Performable {
 
     if (actor.abilityTo(AccesLocalRestAPI::class.java) != null) {
       actor.should(
-          seeThatResponse { it.body("id", `is`("bdd-1")) },
+          seeThatResponse { it.body("uuid", not(isEmptyString())) },
+          seeThatResponse { it.body("name", `is`(actor.recall(Memories.TABLE_NAME) as String)) },
           seeThatResponse { it.body("players.size()", `is`(0)) }
       )
       return

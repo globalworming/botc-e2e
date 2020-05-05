@@ -6,6 +6,7 @@ import com.headissue.botc.e2e.ability.AccesLocalRestAPI
 import com.headissue.botc.e2e.ability.SeeGrimoire
 import com.headissue.botc.e2e.ability.SeeTownSquare
 import com.headissue.botc.e2e.action.*
+import com.headissue.botc.e2e.actor.Memories
 import com.headissue.botc.e2e.question.*
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Ability
@@ -38,7 +39,7 @@ class BotcHappyPathIT {
   @Before
   fun setUp() {
     val actors = MyActors.forStage(onWhatStageShouldWePlay)
-        ?: throw NoMatchingAbilityException("there are not actors configured for this stage")
+        ?: throw RuntimeException("there are not actors configured for this stage")
     storyTeller = actors.storyTeller
     players = actors.players
     storyTeller.can(SeeGrimoire())
@@ -140,6 +141,7 @@ class MyActors(val storyTeller: Actor, val players: GroupOfActors) {
           val players = GroupOfActors()
           generateSequence { cast.actorNamed(faker.gameOfThrones().character()) }
               .take(5).forEach { players.add(it) }
+          cast.actors.forEach { it.remember(Memories.TABLE_NAME, faker.rickAndMorty().character()) }
           MyActors(storyTeller, players)
         }
       }

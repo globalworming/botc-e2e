@@ -2,6 +2,7 @@ package com.headissue.botc.e2e.action
 
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccesLocalRestAPI
+import com.headissue.botc.e2e.actor.Memories
 import com.headissue.botc.e2e.error.CantAccessFrontend
 import com.headissue.botc.e2e.page.DebugGameTable
 import com.headissue.botc.e2e.page.Root
@@ -27,7 +28,10 @@ open class SetUpNewGameTable : Performable {
     }
 
     if (actor.abilityTo(AccesLocalRestAPI::class.java) != null) {
-      actor.attemptsTo(Post.to("/gametables"))
+      val tableName: String = actor.recall(Memories.TABLE_NAME)
+      actor.attemptsTo(Post.to("/gametables").with {
+        it.param("name", tableName)
+      })
       return
     }
 
