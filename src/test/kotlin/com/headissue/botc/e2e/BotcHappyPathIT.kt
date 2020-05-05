@@ -26,7 +26,8 @@ class BotcHappyPathIT {
 
   // FIXME get from env
   //var onWhatStageShouldWePlay = MyStage.LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS
-  var onWhatStageShouldWePlay = Stages.LOCAL_REST_API
+  // var onWhatStageShouldWePlay = Stages.LOCAL_REST_API
+  var onWhatStageShouldWePlay = Stages.LOCAL_FRONTEND_INTEGRATED
 
   lateinit var storyTeller: Actor
   lateinit var players: GroupOfActors

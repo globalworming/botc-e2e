@@ -3,23 +3,26 @@ package com.headissue.botc.e2e.actor
 import com.github.javafaker.Faker
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
+import com.headissue.botc.e2e.actor.Stages.*
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.actors.Cast
 import net.serenitybdd.screenplay.actors.OnlineCast
 import net.serenitybdd.screenplay.rest.abilities.CallAnApi
+import net.thucydides.core.util.EnvironmentVariables
 
 class Actors(val storyTeller: Actor, val players: GroupOfActors) {
 
   companion object {
 
+    internal var environmentVariables: EnvironmentVariables? = null
+
     private val faker = Faker()
 
     fun forStage(stage: Stages): Actors? {
-
+      val tableName = faker.name().firstName()
       return when (stage) {
-
-        Stages.LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS -> {
+        LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS -> {
           val onlineCast = OnlineCast()
           val storyTeller = onlineCast.actorNamed("storyteller");
           val driver = storyTeller.abilityTo(BrowseTheWeb::class.java).driver
@@ -28,25 +31,36 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
            driver
          */
           val mockedRemoteActorsCast = Cast.whereEveryoneCan(BrowseTheWeb.with(driver))
-          val players = GroupOfActors()
-          generateSequence { mockedRemoteActorsCast.actorNamed(faker.gameOfThrones().character()) }
-              .take(5).forEach { players.add(it) }
+          val players = players(mockedRemoteActorsCast)
           storyTeller.can(AccessLocalFrontendMockGameTable())
           players.can(AccessLocalFrontendMockGameTable())
           Actors(storyTeller, players)
         }
 
-        Stages.LOCAL_REST_API -> {
+        LOCAL_REST_API -> {
           val cast = Cast.whereEveryoneCan(CallAnApi.at("http://localhost:8080"), AccessLocalRestAPI())
           val storyTeller = cast.actorNamed("storyteller")
-          val players = GroupOfActors()
-          generateSequence { cast.actorNamed(faker.gameOfThrones().character()) }
-              .take(5).forEach { players.add(it) }
-          val tableName = faker.name().firstName()
+          val players = players(cast)
+          cast.actors.forEach { it.remember(Memories.TABLE_NAME, tableName) }
+          Actors(storyTeller, players)
+        }
+        LOCAL_FRONTEND_INTEGRATED -> {
+          environmentVariables!!.setProperty("webdriver.base.url", "http://localhost:3000")
+          val cast = OnlineCast()
+          val storyTeller = cast.actorNamed("storyteller")
+          val players = players(cast)
           cast.actors.forEach { it.remember(Memories.TABLE_NAME, tableName) }
           Actors(storyTeller, players)
         }
       }
+    }
+
+    private fun players(cast: Cast): GroupOfActors {
+      val players = GroupOfActors()
+      val sequence = generateSequence { cast.actorNamed(faker.gameOfThrones().character()) }
+          .take(5)
+      sequence.forEach { players.add(it) }
+      return players
     }
 
   }
