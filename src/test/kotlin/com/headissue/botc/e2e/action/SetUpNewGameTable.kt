@@ -1,6 +1,7 @@
 package com.headissue.botc.e2e.action
 
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
+import com.headissue.botc.e2e.ability.AccessLocalIntegratedFrontend
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.actor.Memories
 import com.headissue.botc.e2e.error.CantAccessFrontend
@@ -35,6 +36,12 @@ open class SetUpNewGameTable : Performable {
         it.param("id", tableName)
       })
       actor.should(seeThatResponse { it.statusCode(SC_OK) })
+      return
+    }
+
+    if (actor.abilityTo(AccessLocalIntegratedFrontend::class.java) != null) {
+      val tableName: String = actor.recall(Memories.TABLE_NAME)
+      actor.attemptsTo(Open.browserOn(Root()))
       return
     }
 
