@@ -4,6 +4,7 @@ import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccessLocalIntegratedFrontend
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.actor.Memories
+import com.headissue.botc.e2e.question.CurrentUrl
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.NoMatchingAbilityException
 import net.serenitybdd.screenplay.Performable
@@ -30,9 +31,8 @@ open class JoinGame : Performable {
 
     if (actor.abilityTo(AccessLocalIntegratedFrontend::class.java) != null) {
       actor.attemptsTo(OpenBrowserOnRootPage())
-      actor.attemptsTo(Open.relativeUrl("/game"))
-      tableName
-      return actor.attemptsTo(Enter.theValue(actor.name).into(".mocks .addPlayer").thenHit(Keys.ENTER))
+      val tableUrl = actor.asksFor(CurrentUrl()) + "gameTable/${tableName}"
+      return actor.attemptsTo(Open.url(tableUrl))
     }
 
     throw NoMatchingAbilityException(actor.name)
