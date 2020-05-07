@@ -10,12 +10,13 @@ import com.headissue.botc.e2e.page.GameTable
 import net.serenitybdd.core.pages.WebElementFacade
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.NoMatchingAbilityException
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.rest.questions.LastResponse
 
 class PlayersAtTable : QuestionWithDefaultSubject<List<Player>>() {
   override fun answeredBy(actor: Actor): List<Player> {
 
-    if (actor.abilityTo(AccessLocalFrontendMockGameTable::class.java) != null) {
+    if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
       if (actor.abilityTo(SeeGrimoire::class.java) != null) {
         val playerElements = GameTable.grimoire.player.resolveAllFor(actor)
         return playerElements.map {
