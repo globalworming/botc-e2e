@@ -27,7 +27,7 @@ open class MarkPlayerUsedVote(private val name: String) : Performable {
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
       val tableName: String = actor.recall(Memories.TABLE_NAME)
-      actor.attemptsTo(Post.to("/gametable/${tableName}/player/${name}/voted"))
+      actor.attemptsTo(Post.to("/gameTable/${tableName}/player/${name}/voted"))
       return actor.should(ResponseConsequence.seeThatResponse { it.statusCode(HttpStatus.SC_OK) })
     }
 

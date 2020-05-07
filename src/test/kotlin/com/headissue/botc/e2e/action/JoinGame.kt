@@ -18,9 +18,9 @@ open class JoinGame : Performable {
       return actor.attemptsTo(Enter.theValue(actor.name).into(".mocks .addPlayer").thenHit(Keys.ENTER))
     }
 
+    val tableName = actor.recall<String>(Memories.TABLE_NAME)
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
-      val tableName: String = actor.recall(Memories.TABLE_NAME)
-      actor.attemptsTo(Post.to("/gametable/${tableName}/players")
+      actor.attemptsTo(Post.to("/gameTable/${tableName}/players")
           .with { it.param("name", actor.name) })
       return actor.should(seeThatResponse { it.statusCode(SC_OK) })
     }

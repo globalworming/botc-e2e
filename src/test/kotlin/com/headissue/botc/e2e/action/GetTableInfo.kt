@@ -10,7 +10,7 @@ import org.apache.http.HttpStatus.SC_OK
 open class GetTableInfo : Performable {
   override fun <T : Actor> performAs(actor: T) {
     val tableName = actor.recall(Memories.TABLE_NAME) as String
-    actor.attemptsTo(Get.resource("/gametable/${tableName}"))
+    actor.attemptsTo(Get.resource("/gameTable/${tableName}"))
     actor.should(seeThatResponse { it.statusCode(SC_OK) })
   }
 

@@ -19,7 +19,7 @@ open class StartFirstNight : Performable {
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
       val tableName: String = actor.recall(Memories.TABLE_NAME)
-      actor.attemptsTo(Post.to("/gametable/${tableName}/start"))
+      actor.attemptsTo(Post.to("/gameTable/${tableName}/start"))
       return actor.should(seeThatResponse { it.statusCode(SC_OK) })
     }
 

@@ -27,7 +27,7 @@ open class KillPlayer(private val name: String) : Performable {
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
       val tableName: String = actor.recall(Memories.TABLE_NAME)
-      actor.attemptsTo(Post.to("/gametable/${tableName}/player/${name}/kill"))
+      actor.attemptsTo(Post.to("/gameTable/${tableName}/player/${name}/kill"))
       return actor.should(ResponseConsequence.seeThatResponse { it.statusCode(HttpStatus.SC_OK) })
     }
 

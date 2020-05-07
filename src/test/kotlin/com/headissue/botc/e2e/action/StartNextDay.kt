@@ -19,7 +19,7 @@ open class StartNextDay : Performable {
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
       val tableName: String = actor.recall(Memories.TABLE_NAME)
-      actor.attemptsTo(Post.to("/gametable/${tableName}/nextTurn"))
+      actor.attemptsTo(Post.to("/gameTable/${tableName}/nextTurn"))
       return actor.should(ResponseConsequence.seeThatResponse { it.statusCode(HttpStatus.SC_OK) })
     }
 
