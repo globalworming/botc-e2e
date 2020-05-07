@@ -35,7 +35,8 @@ open class SetUpNewGameTable : Performable {
 
     if (actor.abilityTo(AccessLocalIntegratedFrontend::class.java) != null) {
       val tableName: String = actor.recall(Memories.TABLE_NAME)
-      actor.attemptsTo(Open.browserOn(Root()))
+      actor.attemptsTo(OpenBrowserOnRootPage())
+      actor.attemptsTo(Enter.theValue(tableName).into(Root.GAME_TABLE_NAME_INPUT).thenHit(Keys.ENTER))
       return
     }
 
