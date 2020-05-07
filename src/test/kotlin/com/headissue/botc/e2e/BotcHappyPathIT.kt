@@ -5,8 +5,7 @@ import com.headissue.botc.e2e.ability.SeeTownSquare
 import com.headissue.botc.e2e.action.*
 import com.headissue.botc.e2e.actor.Actors
 import com.headissue.botc.e2e.actor.GroupOfActors
-import com.headissue.botc.e2e.actor.Stages.LOCAL_FRONTEND_INTEGRATED
-import com.headissue.botc.e2e.actor.Stages.LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS
+import com.headissue.botc.e2e.actor.Stages.*
 import com.headissue.botc.e2e.question.*
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor

@@ -37,7 +37,7 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
         }
 
         LOCAL_REST_API -> {
-          val cast = Cast.whereEveryoneCan(CallAnApi.at("http://localhost:8080"), AccessLocalRestAPI())
+          val cast = Cast.whereEveryoneCan(CallAnApi.at("http://localhost:8080/api"), AccessLocalRestAPI())
           val storyTeller = cast.actorNamed("storyteller")
           val players = players(cast)
           cast.actors.forEach { it.remember(Memories.TABLE_NAME, tableName) }
