@@ -64,31 +64,31 @@ jobs:
           mvn spring-boot:run
 
 
-        # run tests!
-        - run: mvn clean verify -P it -Dproperties=`pwd`/serenity-integration.properties
+      # run tests!
+      - run: mvn clean verify -P it -Dproperties=`pwd`/serenity-integration.properties
 
-        - run:
-            name: Save test results
-            command: |
-              mkdir -p ~/test-results/junit/
-              find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
-            when: always
-        - store_test_results:
-            path: ~/test-results
-        - store_artifacts:
-            path: ~/test-results/junit
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/junit
 
-        - run:
-            name: Save test results
-            command: |
-              rm -rf ./target/site/serenity/fontawesome-free-5.7.2-web
-              cp -r ./target/site/serenity ~/test-results/
-            when: always
-        - store_test_results:
-            path: ~/test-results
-        - store_artifacts:
-            path: ~/test-results/serenity
+      - run:
+          name: Save test results
+          command: |
+            rm -rf ./target/site/serenity/fontawesome-free-5.7.2-web
+            cp -r ./target/site/serenity ~/test-results/
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/serenity
 
-        - store_artifacts:
-            path: selenium-log/
-            destination: log
+      - store_artifacts:
+          path: selenium-log/
+          destination: log
