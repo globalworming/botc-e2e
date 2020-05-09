@@ -127,24 +127,12 @@ class BotcHappyPathIT {
 
   @Pending
   @Test
-  fun `4 celebrateEvilWinning`() {
-    Assume.assumeThat(wePlayOn, anyOf(
-        `is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS),
-        `is`(LOCAL_FRONTEND_INTEGRATED)
-    ))
-    `2 when players join a table, the storyteller sees players have joined`()
-    storyTeller.attemptsTo(StartGame())
+  fun `4 celebrate evil wins`() {
   }
 
   @Pending
   @Test
-  fun `4 good triumphing`() {
-    Assume.assumeThat(wePlayOn, anyOf(
-        `is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS),
-        `is`(LOCAL_FRONTEND_INTEGRATED)
-    ))
-    `2 when players join a table, the storyteller sees players have joined`()
-    storyTeller.attemptsTo(StartGame())
+  fun `4 celebrate good triumphs`() {
   }
 
 
