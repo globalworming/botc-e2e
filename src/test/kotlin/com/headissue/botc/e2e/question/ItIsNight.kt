@@ -12,7 +12,7 @@ import net.serenitybdd.screenplay.targets.Target
 class ItIsNight : QuestionWithDefaultSubject<Boolean>() {
   override fun answeredBy(actor: Actor): Boolean {
     if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
-      return Target.the("night icon").locatedBy(".night").resolveFor(actor).isVisible
+      return actor.asksFor { Target.the("night icon").locatedBy(".night").resolveAllFor(actor).size > 0}
     }
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {

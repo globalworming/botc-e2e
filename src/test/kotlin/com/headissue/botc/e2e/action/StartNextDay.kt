@@ -1,6 +1,5 @@
 package com.headissue.botc.e2e.action
 
-import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.actor.Memories
 import net.serenitybdd.screenplay.Actor

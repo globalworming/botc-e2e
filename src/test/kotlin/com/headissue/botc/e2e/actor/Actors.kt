@@ -18,12 +18,11 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
 
     private val faker = Faker()
 
-    // fixes side effect, all stages used the same tableName
-    @ExperimentalStdlibApi
-    private val tableNames: ArrayDeque<String> = ArrayDeque(generateSequence { faker.name().firstName() }.take(values().size).toList())
-
     @ExperimentalStdlibApi
     fun forStage(stage: Stage): Actors? {
+
+      // fixes side effect where all stages used the same tableName
+      val tableNames: ArrayDeque<String> = ArrayDeque(generateSequence { faker.name().firstName() }.take(values().size).toList())
 
       return when (stage) {
         LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS -> {

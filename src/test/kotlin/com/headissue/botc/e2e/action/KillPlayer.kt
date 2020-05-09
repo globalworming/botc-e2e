@@ -21,9 +21,10 @@ open class KillPlayer(private val name: String) : Performable {
   @Step("{0} kill player named '#name'")
   override fun <T : Actor> performAs(actor: T) {
     if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
-      return Optional.ofNullable(GameTable.grimoire.player.resolveAllFor(actor).find { it.text.contains(name) })
-          .orElseThrow { NoSuchElementException() }
-          .thenFind<WebElementFacade>(".dead input").click()
+      var playerElement = GameTable.grimoire.player.resolveAllFor(actor).find { it.text.contains(name) }
+      playerElement = playerElement ?: throw NoSuchElementException()
+      val killInput = playerElement.thenFind<WebElementFacade>(".dead input")
+      return killInput.click()
     }
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
