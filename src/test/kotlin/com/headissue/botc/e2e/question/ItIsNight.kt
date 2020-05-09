@@ -5,12 +5,13 @@ import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.action.GetTableInfo
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.NoMatchingAbilityException
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.rest.questions.LastResponse
 import net.serenitybdd.screenplay.targets.Target
 
 class ItIsNight : QuestionWithDefaultSubject<Boolean>() {
   override fun answeredBy(actor: Actor): Boolean {
-    if (actor.abilityTo(AccessLocalFrontendMockGameTable::class.java) != null) {
+    if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
       return Target.the("night icon").locatedBy(".night").resolveFor(actor).isVisible
     }
 

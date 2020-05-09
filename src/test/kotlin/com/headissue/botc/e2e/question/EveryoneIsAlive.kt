@@ -4,11 +4,12 @@ import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.NoMatchingAbilityException
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.questions.Presence
 
 class EveryoneIsAlive : QuestionWithDefaultSubject<Boolean>() {
   override fun answeredBy(actor: Actor): Boolean {
-    if (actor.abilityTo(AccessLocalFrontendMockGameTable::class.java) != null) {
+    if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
       return !Presence.of(".townSquare .dead").viewedBy(actor).asBoolean()
     }
 

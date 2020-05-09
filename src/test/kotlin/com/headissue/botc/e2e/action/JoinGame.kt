@@ -9,6 +9,7 @@ import com.headissue.botc.e2e.question.CurrentUrl
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.NoMatchingAbilityException
 import net.serenitybdd.screenplay.Performable
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.actions.Enter
 import net.serenitybdd.screenplay.actions.Open
 import net.serenitybdd.screenplay.rest.interactions.Post
@@ -35,6 +36,7 @@ open class JoinGame : Performable {
       val tableUrl = actor.asksFor(CurrentUrl()) + "gameTable/${tableName}"
       actor.attemptsTo(Open.url(tableUrl))
       actor.attemptsTo(Enter.theValue(actor.name).into(JoinGame.ENTER_NAME).thenHit(Keys.ENTER))
+      actor.remember(Memories.TABLE_URL, CurrentUrl())
       return
     }
 

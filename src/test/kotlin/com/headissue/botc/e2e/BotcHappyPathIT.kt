@@ -16,10 +16,7 @@ import net.thucydides.core.annotations.Pending
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.collection.IsIterableContainingInOrder
-import org.junit.Assume
-import org.junit.Before
-import org.junit.FixMethodOrder
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters.*
 
@@ -59,7 +56,7 @@ class BotcHappyPathIT {
     players.forEach {
       it.attemptsTo(JoinGame())
     }
-    storyTeller.should(seeThat(CountQuestion(PlayersAtTable()), `is`(5)))
+    storyTeller.should(eventually(seeThat(CountQuestion(PlayersAtTable()), `is`(5))))
   }
 
 
@@ -85,8 +82,8 @@ class BotcHappyPathIT {
 
     storyTeller.attemptsTo(KillPlayer(players[2].name))
     storyTeller.attemptsTo(MarkPlayerUsedVote(players[2].name))
-    players[1].should(eventually(seeThat(PlayerIsDead(players[2].name), `is`(true))))
-    players[1].should(eventually(seeThat(PlayerCanVote(players[2].name), `is`(false))))
+    players[3].should(eventually(seeThat(PlayerIsDead(players[2].name), `is`(true))))
+    players[3].should(eventually(seeThat(PlayerCanVote(players[2].name), `is`(false))))
   }
 
 
@@ -118,7 +115,6 @@ class BotcHappyPathIT {
     ))
     `#2 when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
-
   }
 
 }

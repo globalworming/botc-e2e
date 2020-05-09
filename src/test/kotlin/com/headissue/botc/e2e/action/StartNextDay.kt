@@ -6,6 +6,7 @@ import com.headissue.botc.e2e.actor.Memories
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.NoMatchingAbilityException
 import net.serenitybdd.screenplay.Performable
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.actions.Click
 import net.serenitybdd.screenplay.rest.interactions.Post
 import net.serenitybdd.screenplay.rest.questions.ResponseConsequence
@@ -13,7 +14,7 @@ import org.apache.http.HttpStatus
 
 open class StartNextDay : Performable {
   override fun <T : Actor> performAs(actor: T) {
-    if (actor.abilityTo(AccessLocalFrontendMockGameTable::class.java) != null) {
+    if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
       return actor.attemptsTo(Click.on(".startNextDay"))
     }
 

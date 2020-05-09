@@ -1,6 +1,5 @@
 package com.headissue.botc.e2e.question
 
-import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
 import com.headissue.botc.e2e.ability.SeeGrimoire
 import com.headissue.botc.e2e.ability.SeeTownSquare
