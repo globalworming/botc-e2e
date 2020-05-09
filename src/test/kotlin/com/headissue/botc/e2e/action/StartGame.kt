@@ -12,7 +12,7 @@ import net.serenitybdd.screenplay.rest.interactions.Post
 import net.serenitybdd.screenplay.rest.questions.ResponseConsequence.seeThatResponse
 import org.apache.http.HttpStatus.SC_OK
 
-open class StartFirstNight : Performable {
+open class StartGame : Performable {
   override fun <T : Actor> performAs(actor: T) {
     if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
       return actor.attemptsTo(Click.on(".startGame"))

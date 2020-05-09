@@ -7,6 +7,7 @@ import com.headissue.botc.e2e.actor.Actors
 import com.headissue.botc.e2e.actor.GroupOfActors
 import com.headissue.botc.e2e.actor.Stages.*
 import com.headissue.botc.e2e.question.*
+import net.serenitybdd.core.Serenity
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
@@ -28,8 +29,8 @@ class BotcHappyPathIT {
   // FIXME get from env
   var onWhatStageShouldWePlay =
       //LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS
-      //LOCAL_REST_API
-      LOCAL_FRONTEND_INTEGRATED
+      LOCAL_REST_API
+      //LOCAL_FRONTEND_INTEGRATED
 
   lateinit var storyTeller: Actor
   lateinit var players: GroupOfActors
@@ -63,14 +64,14 @@ class BotcHappyPathIT {
   @Test
   fun `#3 when storyteller starts first night, players can see the town square`() {
     `#2 when players join a table, the storyteller sees players have joined`()
-    storyTeller.attemptsTo(StartFirstNight())
+    storyTeller.attemptsTo(StartGame())
     players[3].attemptsTo(EnsureInitialTownSquareIsDisplayed())
   }
 
   @Test
   fun `#3 as storyteller progresses the story, players can see the updated town square`() {
     `#2 when players join a table, the storyteller sees players have joined`()
-    storyTeller.attemptsTo(StartFirstNight())
+    storyTeller.attemptsTo(StartGame())
     storyTeller.attemptsTo(StartNextDay())
     storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
     players[3].should(eventually(seeThat(ItIsDay(), `is`(true))))
@@ -91,7 +92,7 @@ class BotcHappyPathIT {
   fun `#3 when storyteller starts first night, characters are randomly assigned`() {
     Assume.assumeThat(onWhatStageShouldWePlay, anyOf(`is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)))
     `#2 when players join a table, the storyteller sees players have joined`()
-    storyTeller.attemptsTo(StartFirstNight())
+    storyTeller.attemptsTo(StartGame())
     storyTeller.should(eventually(seeThat(ItIsNight(), `is`(true))))
     storyTeller.should(seeThat(CharactersInPlay(), IsIterableContainingInOrder.contains(
         "Slayer", "Librarian", "Spy", "Imp", "Empath"
@@ -101,7 +102,7 @@ class BotcHappyPathIT {
   @Test
   fun `#3 when storyteller starts first day, it is daytime`() {
     `#2 when players join a table, the storyteller sees players have joined`()
-    storyTeller.attemptsTo(StartFirstNight())
+    storyTeller.attemptsTo(StartGame())
     storyTeller.attemptsTo(StartNextDay())
     storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
   }
@@ -114,7 +115,11 @@ class BotcHappyPathIT {
         `is`(LOCAL_FRONTEND_INTEGRATED)
     ))
     `#2 when players join a table, the storyteller sees players have joined`()
-    storyTeller.attemptsTo(StartFirstNight())
+    storyTeller.attemptsTo(StartGame())
   }
 
+  @After
+  fun tearDown() {
+    Serenity.getWebdriverManager().closeAllDrivers()
+  }
 }
