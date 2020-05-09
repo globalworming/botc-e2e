@@ -4,7 +4,7 @@ import com.github.javafaker.Faker
 import com.headissue.botc.e2e.ability.AccessLocalFrontendMockGameTable
 import com.headissue.botc.e2e.ability.AccessLocalIntegratedFrontend
 import com.headissue.botc.e2e.ability.AccessLocalRestAPI
-import com.headissue.botc.e2e.actor.Stages.*
+import com.headissue.botc.e2e.actor.Stage.*
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.actors.Cast
@@ -18,8 +18,13 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
 
     private val faker = Faker()
 
-    fun forStage(stage: Stages): Actors? {
-      val tableName = faker.name().firstName()
+    // fixes side effect, all stages used the same tableName
+    @ExperimentalStdlibApi
+    private val tableNames: ArrayDeque<String> = ArrayDeque(generateSequence { faker.name().firstName() }.take(values().size).toList())
+
+    @ExperimentalStdlibApi
+    fun forStage(stage: Stage): Actors? {
+
       return when (stage) {
         LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS -> {
           val onlineCast = OnlineCast()
@@ -40,7 +45,7 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
           val cast = Cast.whereEveryoneCan(CallAnApi.at("http://localhost:8080/api"), AccessLocalRestAPI())
           val storyTeller = cast.actorNamed("storyteller")
           val players = players(cast)
-          cast.actors.forEach { it.remember(Memories.TABLE_NAME, tableName) }
+          cast.actors.forEach { it.remember(Memories.TABLE_NAME, tableNames.first()) }
           Actors(storyTeller, players)
         }
         LOCAL_FRONTEND_INTEGRATED -> {
@@ -49,7 +54,7 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
           val storyTeller = cast.actorNamed("storyteller")
           val players = players(cast)
           cast.actors.forEach {
-            it.remember(Memories.TABLE_NAME, tableName)
+            it.remember(Memories.TABLE_NAME, tableNames.first())
             it.can(AccessLocalIntegratedFrontend())
           }
           Actors(storyTeller, players)
@@ -59,9 +64,9 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
 
     private fun players(cast: Cast): GroupOfActors {
       val players = GroupOfActors()
-      val sequence = generateSequence { cast.actorNamed(faker.gameOfThrones().character()) }
+      val actorNames = generateSequence { cast.actorNamed(faker.gameOfThrones().character()) }
           .take(5)
-      sequence.forEach { players.add(it) }
+      actorNames.forEach { players.add(it) }
       return players
     }
 

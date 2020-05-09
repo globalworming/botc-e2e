@@ -5,40 +5,47 @@ import com.headissue.botc.e2e.ability.SeeTownSquare
 import com.headissue.botc.e2e.action.*
 import com.headissue.botc.e2e.actor.Actors
 import com.headissue.botc.e2e.actor.GroupOfActors
-import com.headissue.botc.e2e.actor.Stages.*
+import com.headissue.botc.e2e.actor.Stage
+import com.headissue.botc.e2e.actor.Stage.*
 import com.headissue.botc.e2e.question.*
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.junit.runners.SerenityRunner
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
 import net.serenitybdd.screenplay.GivenWhenThen.seeThat
 import net.serenitybdd.screenplay.questions.CountQuestion
 import net.thucydides.core.annotations.Pending
+import net.thucydides.junit.annotations.TestData
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.collection.IsIterableContainingInOrder
 import org.junit.*
 import org.junit.runner.RunWith
-import org.junit.runners.MethodSorters.*
+import org.junit.runners.MethodSorters.NAME_ASCENDING
 
 
-@RunWith(SerenityRunner::class)
+@RunWith(SerenityParameterizedRunner::class)
 @FixMethodOrder(NAME_ASCENDING)
-class BotcHappyPathIT {
+class BotcHappyPathIT(private val wePlayOn: Stage) {
 
-  // FIXME get from env
-  var onWhatStageShouldWePlay =
-      //LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS
-      LOCAL_REST_API
-      //LOCAL_FRONTEND_INTEGRATED
 
-  lateinit var storyTeller: Actor
-  lateinit var players: GroupOfActors
+  companion object {
+    @JvmStatic
+    @TestData
+    fun data(): Collection<Array<Stage>> = listOf(
+        arrayOf(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS),
+        arrayOf(LOCAL_REST_API),
+        arrayOf(LOCAL_FRONTEND_INTEGRATED)
+    )
 
+    lateinit var storyTeller: Actor
+    lateinit var players: GroupOfActors
+  }
+
+  @ExperimentalStdlibApi
   @Before
   fun setUp() {
-    val actors = Actors.forStage(onWhatStageShouldWePlay)
-        ?: throw RuntimeException("there are not actors configured for this stage")
+    val actors = Actors.forStage(wePlayOn) ?: throw RuntimeException("there are not actors configured for this stage")
     storyTeller = actors.storyTeller
     players = actors.players
     storyTeller.can(SeeGrimoire())
@@ -68,6 +75,7 @@ class BotcHappyPathIT {
     players[3].attemptsTo(EnsureInitialTownSquareIsDisplayed())
   }
 
+  // FIXME, flakyness because of quick call to nextturn, introduce global "i am fuzzy" marker to wait for it to be gone
   @Test
   fun `#3 as storyteller progresses the story, players can see the updated town square`() {
     `#2 when players join a table, the storyteller sees players have joined`()
@@ -90,7 +98,7 @@ class BotcHappyPathIT {
 
   @Test
   fun `#3 when storyteller starts first night, characters are randomly assigned`() {
-    Assume.assumeThat(onWhatStageShouldWePlay, anyOf(`is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)))
+    Assume.assumeThat(wePlayOn, anyOf(`is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)))
     `#2 when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartGame())
     storyTeller.should(eventually(seeThat(ItIsNight(), `is`(true))))
@@ -110,7 +118,7 @@ class BotcHappyPathIT {
   @Pending
   @Test
   fun `#3 when storyteller starts next phase, abilities are marked as available agin`() {
-    Assume.assumeThat(onWhatStageShouldWePlay, anyOf(
+    Assume.assumeThat(wePlayOn, anyOf(
         `is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS),
         `is`(LOCAL_FRONTEND_INTEGRATED)
     ))
