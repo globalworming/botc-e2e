@@ -56,7 +56,15 @@ jobs:
             java -jar selenium-server-standalone-3.5.3.jar -log selenium-log/selenium.log
           background: true
 
-      # run tests!
+      -run:
+        name: setup backend
+        background: true
+        command: |
+          cd botc-unofficial-backend
+          mvn spring-boot:run
+
+
+        # run tests!
       - run: mvn clean verify -P it -Dproperties=`pwd`/serenity-integration.properties
 
       - run:
