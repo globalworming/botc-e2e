@@ -17,17 +17,17 @@ jobs:
       - checkout
 
       - run:
-        name: checkout frontend and backend sources
-        command: |
-          git clone git@github.com:globalworming/botc-unofficial-frontend.git
-          git clone git@github.com:globalworming/botc-unofficial-backend.git
+          name: checkout frontend and backend sources
+          command: |
+              git clone git@github.com:globalworming/botc-unofficial-frontend.git
+              git clone git@github.com:globalworming/botc-unofficial-backend.git
 
       - run:
-        name: setup frontend
-        background: true
-        command: |
-          cd botc-unofficial-frontend
-          npm i; npm start &
+          name: setup frontend
+          background: true
+          command: |
+              cd botc-unofficial-frontend
+              npm i; npm start &
 
 
       # Download and cache dependencies
@@ -57,11 +57,11 @@ jobs:
           background: true
 
       - run:
-        name: setup backend
-        background: true
-        command: |
-          cd botc-unofficial-backend
-          mvn spring-boot:run
+          name: setup backend
+          background: true
+          command: |
+              cd botc-unofficial-backend
+              mvn spring-boot:run
 
 
       # run tests!
