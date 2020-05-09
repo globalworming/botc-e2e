@@ -19,15 +19,20 @@ jobs:
       - run:
           name: checkout frontend and backend sources
           command: |
-              git clone git@github.com:globalworming/botc-unofficial-frontend.git
-              git clone git@github.com:globalworming/botc-unofficial-backend.git
+            git clone git@github.com:globalworming/botc-unofficial-frontend.git
+            git clone git@github.com:globalworming/botc-unofficial-backend.git
 
       - run:
           name: setup frontend
           background: true
           command: |
-              cd botc-unofficial-frontend
-              npm i; npm start &
+            cd botc-unofficial-frontend
+            npm i; npm start
+
+      - run:
+          name: Download Selenium
+          command: |
+            curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
 
 
       # Download and cache dependencies
@@ -65,7 +70,7 @@ jobs:
 
 
       # run tests!
-      - run: mvn clean verify -P it -Dproperties=`pwd`/serenity-integration.properties
+      - run: mvn clean verify
 
       - run:
           name: Save test results
