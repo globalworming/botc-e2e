@@ -12,16 +12,20 @@ import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
 import net.serenitybdd.screenplay.GivenWhenThen.seeThat
 import net.serenitybdd.screenplay.questions.CountQuestion
+import net.thucydides.core.annotations.Pending
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.collection.IsIterableContainingInOrder
 import org.junit.Assume
 import org.junit.Before
+import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.MethodSorters.*
 
 
 @RunWith(SerenityRunner::class)
+@FixMethodOrder(NAME_ASCENDING)
 class BotcHappyPathIT {
 
   // FIXME get from env
@@ -44,14 +48,14 @@ class BotcHappyPathIT {
   }
 
   @Test
-  fun `when storyteller opens a new table, table is without players`() {
+  fun `#1 when storyteller opens a new table, table is without players`() {
     storyTeller.attemptsTo(SetUpNewGameTable())
     storyTeller.attemptsTo(EnsureEmptyTableIsPresent())
   }
 
   @Test
-  fun `when players join a table, the storyteller sees players have joined`() {
-    `when storyteller opens a new table, table is without players`()
+  fun `#2 when players join a table, the storyteller sees players have joined`() {
+    `#1 when storyteller opens a new table, table is without players`()
     players.forEach {
       it.attemptsTo(JoinGame())
     }
@@ -60,15 +64,15 @@ class BotcHappyPathIT {
 
 
   @Test
-  fun `when storyteller starts first night, players can see the town square`() {
-    `when players join a table, the storyteller sees players have joined`()
+  fun `#3 when storyteller starts first night, players can see the town square`() {
+    `#2 when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
     players[3].attemptsTo(EnsureInitialTownSquareIsDisplayed())
   }
 
   @Test
-  fun `as storyteller progresses the story, players can see the updated town square`() {
-    `when players join a table, the storyteller sees players have joined`()
+  fun `#3 as storyteller progresses the story, players can see the updated town square`() {
+    `#2 when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
     storyTeller.attemptsTo(StartNextDay())
     storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
@@ -87,9 +91,9 @@ class BotcHappyPathIT {
 
 
   @Test
-  fun `when storyteller starts first night, characters are randomly assigned`() {
+  fun `#3 when storyteller starts first night, characters are randomly assigned`() {
     Assume.assumeThat(onWhatStageShouldWePlay, anyOf(`is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)))
-    `when players join a table, the storyteller sees players have joined`()
+    `#2 when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
     storyTeller.should(eventually(seeThat(ItIsNight(), `is`(true))))
     storyTeller.should(seeThat(CharactersInPlay(), IsIterableContainingInOrder.contains(
@@ -98,10 +102,23 @@ class BotcHappyPathIT {
   }
 
   @Test
-  fun `when storyteller starts first day, it is daytime`() {
-    `when players join a table, the storyteller sees players have joined`()
+  fun `#3 when storyteller starts first day, it is daytime`() {
+    `#2 when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartFirstNight())
     storyTeller.attemptsTo(StartNextDay())
     storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
   }
+
+  @Pending
+  @Test
+  fun `#3 when storyteller starts next phase, abilities are marked as available agin`() {
+    Assume.assumeThat(onWhatStageShouldWePlay, anyOf(
+        `is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS),
+        `is`(LOCAL_FRONTEND_INTEGRATED)
+    ))
+    `#2 when players join a table, the storyteller sees players have joined`()
+    storyTeller.attemptsTo(StartFirstNight())
+
+  }
+
 }
