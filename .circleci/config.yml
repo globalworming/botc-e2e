@@ -16,13 +16,13 @@ jobs:
     steps:
       - checkout
 
-      -run:
+      - run:
         name: checkout frontend and backend sources
         command: |
           git clone git@github.com:globalworming/botc-unofficial-frontend.git
           git clone git@github.com:globalworming/botc-unofficial-backend.git
 
-      -run:
+      - run:
         name: setup frontend
         background: true
         command: |
