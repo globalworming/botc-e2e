@@ -107,8 +107,8 @@
                 <configuration>
                     <systemPropertyVariables>
                         <e2e.on.stage>${stage}</e2e.on.stage>
-                        <!--
                         <serenity.dry.run>true</serenity.dry.run>
+                        <!--
                         -->
                     </systemPropertyVariables>
                 </configuration>
