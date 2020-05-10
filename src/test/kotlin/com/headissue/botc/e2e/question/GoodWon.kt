@@ -5,6 +5,9 @@ import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.NoMatchingAbilityException
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.questions.Visibility
+import net.serenitybdd.screenplay.rest.questions.LastResponse
+import net.serenitybdd.screenplay.rest.questions.ResponseConsequence
+import org.hamcrest.CoreMatchers.*
 
 class GoodWon : QuestionWithDefaultSubject<Boolean>() {
   override fun answeredBy(actor: Actor): Boolean {
@@ -13,7 +16,7 @@ class GoodWon : QuestionWithDefaultSubject<Boolean>() {
     }
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
-      TODO()
+      return LastResponse.received().answeredBy(actor).body().jsonPath().get("goodWon")
     }
 
     throw NoMatchingAbilityException(actor.name)
