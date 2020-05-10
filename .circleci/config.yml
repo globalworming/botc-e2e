@@ -79,11 +79,11 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      - runtests:
+      - doendtoend:
           stage: "LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS"
-      - runtests:
+      - doendtoend:
           stage: "LOCAL_FRONTEND_INTEGRATED"
-      - runtests:
+      - doendtoend:
           stage: "LOCAL_REST_API"
 
       - store_test_results:
@@ -110,7 +110,7 @@ commands:
   sayhello:
     steps:
       - run: echo "hello"
-  runtests:
+  doendtoend:
     description: "run mvn verify and store results"
     parameters:
       stage:
