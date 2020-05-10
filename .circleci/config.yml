@@ -112,13 +112,13 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-#      - startFrontend
-#      - startBackend
-#      - startSelenium
-#      - waitForSutReady
+      - startFrontend
+      - startBackend
+      - startSelenium
+      - waitForSutReady
       - test:
-#          requires:
-#            - waitForSutReady
+          requires:
+            - waitForSutReady
           filters:
             branches:
               only: master
