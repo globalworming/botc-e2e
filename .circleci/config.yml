@@ -113,7 +113,10 @@ workflows:
       - startFrontend
       - startBackend
       - startSelenium
+      - waitForSutReady
       - test:
+          requires:
+            - waitForSutReady
           filters:
             branches:
               only: master
