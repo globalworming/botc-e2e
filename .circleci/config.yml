@@ -3,11 +3,12 @@ jobs:
     docker:
       - image: 'circleci/node:latest'
     working_directory: ~/frontend
+
     steps:
+      - add_ssh_keys
+      - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - react/install:
           before_install:
-            - add_ssh_keys
-            - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
             - run: git clone git@github.com:globalworming/botc-unofficial-frontend.git && cd botc-unofficial-frontend
       - run: yarn start
 
