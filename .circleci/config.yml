@@ -62,7 +62,6 @@ jobs:
       - image: 'circleci/openjdk:8u171-jdk-browsers'
 
     steps:
-      - sayhello
       - checkout
 
       # Download and cache dependencies
@@ -91,25 +90,7 @@ jobs:
       - store_artifacts:
           path: ~/test-results/summary-report
 
-      #- run:
-      #    name: Save test results
-      #    command: |
-      #      rm -rf ./target/site/serenity/fontawesome-free-5.7.2-web
-      #      cp -r ./target/site/serenity ~/test-results/
-      - run:
-          name: Save test results
-          command: |
-
-          when: always
-      - store_test_results:
-          path: ~/test-results
-      - store_artifacts:
-          path: ~/test-results/serenity
-
 commands:
-  sayhello:
-    steps:
-      - run: echo "hello"
   doendtoend:
     description: "run mvn verify and store results"
     parameters:
