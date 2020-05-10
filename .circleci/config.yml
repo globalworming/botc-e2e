@@ -111,10 +111,7 @@ workflows:
     jobs:
       - startFrontend
       - startBackend
-      - waitForSutReady
       - test:
-          requires:
-            - waitForSutReady
           filters:
             branches:
               only: master
