@@ -58,17 +58,17 @@ jobs:
             mkdir selenium-log
             java -jar selenium-server-standalone-3.5.3.jar -log selenium-log/selenium.log
 
-      - doendtoend:
+      - verify_end_to_end:
           stage: "LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS"
-      - doendtoend:
+      - verify_end_to_end:
           stage: "LOCAL_FRONTEND_INTEGRATED"
-      - doendtoend:
+      - verify_end_to_end:
           stage: "LOCAL_REST_API"
 
 
 
 commands:
-  doendtoend:
+  verify_end_to_end:
     description: "run mvn verify and store results"
     parameters:
       stage:
@@ -94,5 +94,10 @@ commands:
           path: ~/test-results/
       - store_artifacts:
           path: ~/test-results/
+
+workflows:
+  build_and_test:
+    jobs:
+      - test
 orbs:
   node: circleci/node@2.1.0
