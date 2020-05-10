@@ -14,7 +14,7 @@ jobs:
           name: start frontend
           command: |
             cd botc-unofficial-frontend
-            yarn i; yarn start
+            yarn install && yarn start
 
   startBackend:
     docker:

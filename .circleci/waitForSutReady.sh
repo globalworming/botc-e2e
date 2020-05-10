@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-stopAfterTries=20
+stopAfterTries=100
 currentTry=0
 
 pollUntilOkResponse() {
