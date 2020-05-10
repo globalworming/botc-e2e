@@ -54,6 +54,7 @@ jobs:
       - checkout
       - run:
           name: poll applications
+          background: true
           command: |
             sh .circleci/waitForSutReady.sh
   test:
