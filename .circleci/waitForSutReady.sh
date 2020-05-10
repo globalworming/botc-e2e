@@ -22,7 +22,6 @@ countTries() {
   fi
 }
 
-
 pollUntilOkResponse 3000
 pollUntilOkResponse 8080
 
