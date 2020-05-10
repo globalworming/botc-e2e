@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/frontend
     steps:
       - react/install:
-          - before_install:
+          before_install:
             - add_ssh_keys
             - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
             - run: git clone git@github.com:globalworming/botc-unofficial-frontend.git && cd botc-unofficial-frontend
