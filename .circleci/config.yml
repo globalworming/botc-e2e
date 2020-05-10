@@ -103,7 +103,13 @@ commands:
       - run:
           command: |
             mvn clean verify -P << parameters.stage >> -Dwebdriver.remote.driver=chrome -Dwebdriver.remote.url=http://localhost:4444/wd/hub
+          when: always
+      - run:
+          command: |
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - run:
+          command: |
             cp target/site/<< parameters.stage >>/serenity-summary.html ~/test-results/summary-report/<< parameters.stage >>.html
           when: always
 
