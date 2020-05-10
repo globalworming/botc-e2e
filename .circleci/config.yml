@@ -85,12 +85,7 @@ jobs:
       - doendtoend:
           stage: "LOCAL_REST_API"
 
-      - run: mkdir -p ~/test-results/summary-report/
 
-      - store_test_results:
-          path: ~/test-results/junit
-      - store_artifacts:
-          path: ~/test-results/summary-report
 
 commands:
   doendtoend:
@@ -106,12 +101,19 @@ commands:
           when: always
       - run:
           command: |
+            mkdir -P ~/test-results/junit/
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
           when: always
       - run:
           command: |
+            mkdir -p ~/test-results/summary-report/
             cp target/site/<< parameters.stage >>/serenity-summary.html ~/test-results/summary-report/<< parameters.stage >>.html
           when: always
+
+      - store_test_results:
+          path: ~/test-results/junit
+      - store_artifacts:
+          path: ~/test-results/summary-report
 
 
 workflows:
