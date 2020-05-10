@@ -3,6 +3,7 @@ package com.headissue.botc.e2e.test.happy
 import com.headissue.botc.e2e.ability.SeeGrimoire
 import com.headissue.botc.e2e.ability.SeeTownSquare
 import com.headissue.botc.e2e.action.DeclareEvilWins
+import com.headissue.botc.e2e.action.DeclareGoodWins
 import com.headissue.botc.e2e.action.EnsureEmptyTableIsPresent
 import com.headissue.botc.e2e.action.EnsureInitialTownSquareIsDisplayed
 import com.headissue.botc.e2e.action.JoinGame
@@ -16,6 +17,8 @@ import com.headissue.botc.e2e.actor.GroupOfActors
 import com.headissue.botc.e2e.actor.Stage
 import com.headissue.botc.e2e.actor.Stage.*
 import com.headissue.botc.e2e.question.CharactersInPlay
+import com.headissue.botc.e2e.question.EvilWon
+import com.headissue.botc.e2e.question.GoodWon
 import com.headissue.botc.e2e.question.ItIsDay
 import com.headissue.botc.e2e.question.ItIsNight
 import com.headissue.botc.e2e.question.PlayerCanVote
@@ -138,24 +141,20 @@ class BotcHappyPathIT {
     storyTeller.attemptsTo(StartGame())
   }
 
-  @Pending
   @Test
   fun `3 celebrate evil wins`() {
     `2 when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartGame())
     storyTeller.attemptsTo(DeclareEvilWins())
- //   storyTeller.should(seeThat(EvilWon()))
-  //  storyTeller.should(seeThat(GameIsResolved))
+    storyTeller.should(seeThat(EvilWon(), `is`(true)))
   }
 
-  @Pending
   @Test
   fun `3 celebrate good triumphs`() {
     `2 when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartGame())
-   // storyTeller.attemptsTo(DeclareGoodWins())
-    //storyTeller.should(seeThat(GoodWon()))
-  //  storyTeller.should(seeThat(GameIsResolved))
+    storyTeller.attemptsTo(DeclareGoodWins())
+    storyTeller.should(seeThat(GoodWon(), `is`(true)))
   }
 
 

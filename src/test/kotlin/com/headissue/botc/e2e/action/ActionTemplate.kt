@@ -7,16 +7,14 @@ import net.serenitybdd.screenplay.Performable
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb
 import net.serenitybdd.screenplay.actions.Click
 
-open class DeclareEvilWins : Performable {
+open class ActionTemplate : Performable {
   override fun <T : Actor> performAs(actor: T) {
     if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
-      return actor.attemptsTo(Click.on(".evilWins"))
+      return
     }
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
-      TODO()
       return
-
     }
 
     throw NoMatchingAbilityException(actor.name)
