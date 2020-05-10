@@ -7,10 +7,8 @@ jobs:
     steps:
       - add_ssh_keys
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-      - react/install:
-          before_install:
-            - run: git clone git@github.com:globalworming/botc-unofficial-frontend.git && cd botc-unofficial-frontend
-      - run: yarn start
+      - run: git clone git@github.com:globalworming/botc-unofficial-frontend.git && cd botc-unofficial-frontend
+      - run: npm install && npm start
 
   startBackend:
     docker:
@@ -98,9 +96,6 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/serenity
-orbs:
-  react: thefrontside/react@0.2.0
-version: 2.1
 workflows:
   version: 2
   build_and_test:
