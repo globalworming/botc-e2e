@@ -55,7 +55,6 @@ jobs:
 
       - run:
           name: poll applications
-          background: true
           command: |
             sh .circleci/waitForSutReady.sh
 
@@ -120,4 +119,4 @@ workflows:
             branches:
               only: master
 orbs:
-  node: circleci/node@x.y
+  node: circleci/node@2.1.0
