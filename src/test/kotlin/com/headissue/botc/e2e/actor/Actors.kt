@@ -18,11 +18,9 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
 
     private val faker = Faker()
 
-    @ExperimentalStdlibApi
     fun forStage(stage: Stage): Actors? {
 
       // fixes side effect where all stages used the same tableName
-      val tableNames: ArrayDeque<String> = ArrayDeque(generateSequence { faker.name().firstName() }.take(values().size).toList())
 
       return when (stage) {
         LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS -> {
@@ -41,19 +39,21 @@ class Actors(val storyTeller: Actor, val players: GroupOfActors) {
         }
 
         LOCAL_REST_API -> {
+          val tableName = faker.name().firstName()
           val cast = Cast.whereEveryoneCan(CallAnApi.at("http://localhost:8080/api"), AccessLocalRestAPI())
           val storyTeller = cast.actorNamed("storyteller")
           val players = players(cast)
-          cast.actors.forEach { it.remember(Memories.TABLE_NAME, tableNames.first()) }
+          cast.actors.forEach { it.remember(Memories.TABLE_NAME, tableName) }
           Actors(storyTeller, players)
         }
         LOCAL_FRONTEND_INTEGRATED -> {
+          val tableName = faker.name().firstName()
           System.setProperty(ThucydidesSystemProperty.WEBDRIVER_BASE_URL.preferredName(), "http://localhost:3000")
           val cast = OnlineCast()
           val storyTeller = cast.actorNamed("storyteller")
           val players = players(cast)
           cast.actors.forEach {
-            it.remember(Memories.TABLE_NAME, tableNames.first())
+            it.remember(Memories.TABLE_NAME, tableName)
             it.can(AccessLocalIntegratedFrontend())
           }
           Actors(storyTeller, players)

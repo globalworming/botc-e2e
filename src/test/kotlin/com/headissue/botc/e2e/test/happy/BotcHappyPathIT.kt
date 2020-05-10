@@ -9,7 +9,6 @@ import com.headissue.botc.e2e.actor.Stage
 import com.headissue.botc.e2e.actor.Stage.*
 import com.headissue.botc.e2e.question.*
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.eventually
@@ -17,7 +16,6 @@ import net.serenitybdd.screenplay.GivenWhenThen.seeThat
 import net.serenitybdd.screenplay.questions.CountQuestion
 import net.thucydides.core.annotations.Pending
 import net.thucydides.core.util.EnvironmentVariables
-import net.thucydides.junit.annotations.TestData
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.anyOf
 import org.hamcrest.MatcherAssert.assertThat
@@ -37,7 +35,6 @@ class BotcHappyPathIT {
   lateinit var wePlayOn: Stage
   lateinit var environmentVariables: EnvironmentVariables
 
-  @ExperimentalStdlibApi
   @Before
   fun setUp() {
     val stage = environmentVariables.getProperty("e2e.on.stage")
