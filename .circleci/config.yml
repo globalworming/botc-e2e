@@ -99,7 +99,7 @@ commands:
         default: "LOCAL_REST_API"
     steps:
       - run: mkdir -p ~/test-results/summary-report/
-      - run: mvn clean verify -P << parameters.stage >>
+      - run: mvn clean verify -P << parameters.stage >> -Dwebdriver.remote.driver=chrome -Dwebdriver.remote.url=http://localhost:4444/wd/hub
       - run:
           name: Save test results
           command: |
