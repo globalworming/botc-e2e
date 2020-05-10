@@ -78,11 +78,11 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      - runTests:
+      - runtests:
           stage: "LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS"
-      - runTests:
+      - runtests:
           stage: "LOCAL_FRONTEND_INTEGRATED"
-      - runTests:
+      - runtests:
           stage: "LOCAL_REST_API"
 
       - store_test_results:
@@ -106,7 +106,7 @@ jobs:
           path: ~/test-results/serenity
 
 commands:
-  runTests:
+  runtests:
     description: "run mvn verify and store results"
     parameters:
       stage:
