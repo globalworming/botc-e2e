@@ -8,7 +8,8 @@ jobs:
       - add_ssh_keys
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - checkout
-      - node/install
+      - node/install:
+          node-version: "latest"
 
       - run: git clone git@github.com:globalworming/botc-unofficial-frontend.git
       - run:
