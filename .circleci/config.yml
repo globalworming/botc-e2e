@@ -78,30 +78,51 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
-      # run tests!
-      - run: mvn clean verify
+      - runTests:
+          stage: "LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS"
+      - runTests:
+          stage: "LOCAL_FRONTEND_INTEGRATED"
+      - runTests:
+          stage: "LOCAL_REST_API"
 
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
-          when: always
       - store_test_results:
-          path: ~/test-results
-      - store_artifacts:
           path: ~/test-results/junit
+      - store_artifacts:
+          path: ~/test-results/summary-report
 
+      #- run:
+      #    name: Save test results
+      #    command: |
+      #      rm -rf ./target/site/serenity/fontawesome-free-5.7.2-web
+      #      cp -r ./target/site/serenity ~/test-results/
       - run:
           name: Save test results
           command: |
-            rm -rf ./target/site/serenity/fontawesome-free-5.7.2-web
-            cp -r ./target/site/serenity ~/test-results/
+
           when: always
       - store_test_results:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/serenity
+
+commands:
+  runTests:
+    description: "run mvn verify and store results"
+    parameters:
+      stage:
+        type: string
+        default: "LOCAL_REST_API"
+    steps:
+      - run: mkdir -p ~/test-results/summary-report/
+      - run: mvn clean verify -P << parameters.stage >>
+      - run:
+          name: Save test results
+          command: |
+            find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+            cp target/site/<< parameters.stage >>/serenity-summary.html ~/test-results/summary-report/local-rest-api.html
+          when: always
+
+
 workflows:
   version: 2
   build_and_test:
