@@ -46,10 +46,10 @@ import org.junit.runners.MethodSorters.NAME_ASCENDING
 @FixMethodOrder(NAME_ASCENDING)
 class BotcHappyPathIT {
 
-  lateinit var storyTeller: Actor
-  lateinit var players: GroupOfActors
-  lateinit var wePlayOn: Stage
-  lateinit var environmentVariables: EnvironmentVariables
+  private lateinit var storyTeller: Actor
+  private lateinit var players: GroupOfActors
+  private lateinit var wePlayOn: Stage
+  private lateinit var environmentVariables: EnvironmentVariables
 
   @Before
   fun setUp() {
