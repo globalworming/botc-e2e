@@ -94,15 +94,5 @@ commands:
           path: ~/test-results/
       - store_artifacts:
           path: ~/test-results/
-
-workflows:
-  build_and_test:
-    jobs:
-      - startFrontend
-      - startBackend
-      - test:
-          filters:
-            branches:
-              only: master
 orbs:
   node: circleci/node@2.1.0
