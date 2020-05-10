@@ -3,7 +3,6 @@ jobs:
   startFrontend:
     docker:
       - image: 'circleci/node:latest'
-    working_directory: ~/frontend
 
     steps:
       - add_ssh_keys
@@ -20,7 +19,6 @@ jobs:
   startBackend:
     docker:
       - image: 'circleci/openjdk:8u171-jdk'
-    working_directory: ~/backend
 
     steps:
       - add_ssh_keys
@@ -37,7 +35,6 @@ jobs:
   startSelenium:
     docker:
       - image: 'circleci/openjdk:8u171-jdk'
-    working_directory: ~/hub
     steps:
       - run:
           name: Download Selenium
@@ -53,7 +50,6 @@ jobs:
   waitForSutReady:
     docker:
       - image: 'cimg/base:stable'
-    working_directory: ~/e2e
     steps:
       - checkout
       - run:
@@ -64,7 +60,6 @@ jobs:
   test:
     docker:
       - image: 'circleci/openjdk:8u171-jdk-browsers'
-    working_directory: ~/e2e
 
     steps:
 
