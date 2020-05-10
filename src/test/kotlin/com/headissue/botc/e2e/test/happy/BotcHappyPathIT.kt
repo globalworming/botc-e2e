@@ -2,26 +2,42 @@ package com.headissue.botc.e2e.test.happy
 
 import com.headissue.botc.e2e.ability.SeeGrimoire
 import com.headissue.botc.e2e.ability.SeeTownSquare
-import com.headissue.botc.e2e.action.*
+import com.headissue.botc.e2e.action.DeclareEvilWins
+import com.headissue.botc.e2e.action.EnsureEmptyTableIsPresent
+import com.headissue.botc.e2e.action.EnsureInitialTownSquareIsDisplayed
+import com.headissue.botc.e2e.action.JoinGame
+import com.headissue.botc.e2e.action.KillPlayer
+import com.headissue.botc.e2e.action.MarkPlayerUsedVote
+import com.headissue.botc.e2e.action.SetUpNewGameTable
+import com.headissue.botc.e2e.action.StartGame
+import com.headissue.botc.e2e.action.StartNextDay
 import com.headissue.botc.e2e.actor.Actors
 import com.headissue.botc.e2e.actor.GroupOfActors
 import com.headissue.botc.e2e.actor.Stage
 import com.headissue.botc.e2e.actor.Stage.*
-import com.headissue.botc.e2e.question.*
+import com.headissue.botc.e2e.question.CharactersInPlay
+import com.headissue.botc.e2e.question.ItIsDay
+import com.headissue.botc.e2e.question.ItIsNight
+import com.headissue.botc.e2e.question.PlayerCanVote
+import com.headissue.botc.e2e.question.PlayerIsDead
+import com.headissue.botc.e2e.question.PlayersAtTable
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor
-import net.serenitybdd.screenplay.EventualConsequence.eventually
-import net.serenitybdd.screenplay.GivenWhenThen.seeThat
+import net.serenitybdd.screenplay.EventualConsequence.*
+import net.serenitybdd.screenplay.GivenWhenThen.*
 import net.serenitybdd.screenplay.questions.CountQuestion
 import net.thucydides.core.annotations.Pending
 import net.thucydides.core.util.EnvironmentVariables
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.anyOf
-import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.CoreMatchers.*
+import org.hamcrest.MatcherAssert.*
 import org.hamcrest.collection.IsIterableContainingInOrder
 import org.hamcrest.core.IsCollectionContaining
-import org.junit.*
+import org.junit.After
+import org.junit.Assume
+import org.junit.Before
+import org.junit.FixMethodOrder
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters.NAME_ASCENDING
 
@@ -124,12 +140,22 @@ class BotcHappyPathIT {
 
   @Pending
   @Test
-  fun `4 celebrate evil wins`() {
+  fun `3 celebrate evil wins`() {
+    `2 when players join a table, the storyteller sees players have joined`()
+    storyTeller.attemptsTo(StartGame())
+    storyTeller.attemptsTo(DeclareEvilWins())
+ //   storyTeller.should(seeThat(EvilWon()))
+  //  storyTeller.should(seeThat(GameIsResolved))
   }
 
   @Pending
   @Test
-  fun `4 celebrate good triumphs`() {
+  fun `3 celebrate good triumphs`() {
+    `2 when players join a table, the storyteller sees players have joined`()
+    storyTeller.attemptsTo(StartGame())
+   // storyTeller.attemptsTo(DeclareGoodWins())
+    //storyTeller.should(seeThat(GoodWon()))
+  //  storyTeller.should(seeThat(GameIsResolved))
   }
 
 
