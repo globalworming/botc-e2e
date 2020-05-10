@@ -1,12 +1,15 @@
 version: 2.1
 jobs:
-  startFrontend:
+  test:
     docker:
-      - image: 'circleci/node:latest'
+      - image: 'circleci/openjdk:8u171-jdk-browsers'
 
     steps:
       - add_ssh_keys
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - checkout
+      - node/install
+
       - run: git clone git@github.com:globalworming/botc-unofficial-frontend.git
       - run:
           name: frontend
@@ -16,15 +19,7 @@ jobs:
             npm install
             npm start &
 
-  startBackend:
-    docker:
-      - image: 'circleci/openjdk:8u171-jdk'
-
-    steps:
-      - add_ssh_keys
-      - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: git clone git@github.com:globalworming/botc-unofficial-backend.git
-
       - run:
           name: start backend
           background: true
@@ -32,12 +27,6 @@ jobs:
             cd botc-unofficial-backend
             mvn spring-boot:run
 
-  test:
-    docker:
-      - image: 'circleci/openjdk:8u171-jdk-browsers'
-
-    steps:
-      - checkout
 
       # Download and cache dependencies
       - restore_cache:
