@@ -10,6 +10,13 @@ jobs:
       - run: git clone git@github.com:globalworming/botc-unofficial-frontend.git
       - run: cd botc-unofficial-frontend; npm install
       - run: cd botc-unofficial-frontend; npm start
+      - run:
+          name: frontend
+          background: true
+          command: |
+            cd botc-unofficial-frontend
+            npm install
+            npm start
 
   startBackend:
     docker:

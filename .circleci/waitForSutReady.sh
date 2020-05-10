@@ -20,7 +20,6 @@ countTries() {
     echo "gave up"
     exit 1
   fi
-  ps aux | grep npm
 }
 
 
