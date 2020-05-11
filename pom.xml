@@ -6,7 +6,7 @@
 
     <groupId>com.headissue</groupId>
     <artifactId>botc-e2e</artifactId>
-    <version>0.1.1</version>
+    <version>0.2-SNAPSHOT</version>
 
     <properties>
         <serenity.version>2.2.4</serenity.version>
