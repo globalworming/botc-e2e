@@ -9,7 +9,7 @@
     <version>0.2-SNAPSHOT</version>
 
     <properties>
-        <serenity.version>2.2.4</serenity.version>
+        <serenity.version>2.2.5</serenity.version>
         <kotlin.version>1.3.70</kotlin.version>
     </properties>
 
