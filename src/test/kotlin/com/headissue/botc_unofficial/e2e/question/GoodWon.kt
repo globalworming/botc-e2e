@@ -1,0 +1,25 @@
+package com.headissue.botc_unofficial.e2e.question
+
+import com.headissue.botc_unofficial.e2e.ability.AccessLocalRestAPI
+import net.serenitybdd.screenplay.Actor
+import net.serenitybdd.screenplay.NoMatchingAbilityException
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb
+import net.serenitybdd.screenplay.questions.Visibility
+import net.serenitybdd.screenplay.rest.questions.LastResponse
+import net.serenitybdd.screenplay.rest.questions.ResponseConsequence
+import org.hamcrest.CoreMatchers.*
+
+class GoodWon : QuestionWithDefaultSubject<Boolean>() {
+  override fun answeredBy(actor: Actor): Boolean {
+    if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
+      return Visibility.of(".goodWon").viewedBy(actor).asBoolean()
+    }
+
+    if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {
+      return LastResponse.received().answeredBy(actor).body().jsonPath().get("goodWon")
+    }
+
+    throw NoMatchingAbilityException(actor.name)
+  }
+
+}
