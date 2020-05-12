@@ -16,7 +16,7 @@ open class KillPlayer(private val name: String) : Performable {
   @Step("{0} kill player named '#name'")
   override fun <T : Actor> performAs(actor: T) {
     if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
-      return  actor.attemptsTo(ClickOnKillPlayer(name))
+      return actor.attemptsTo(ClickOnKillPlayer(name))
     }
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {

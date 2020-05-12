@@ -21,9 +21,7 @@ open class MarkPlayerUsedVote(private val name: String) : Performable {
   @Step("{0} marks player named '#name' has used vote")
   override fun <T : Actor> performAs(actor: T) {
     if (actor.abilityTo(BrowseTheWeb::class.java) != null) {
-      return Optional.ofNullable(GameTable.grimoire.player.resolveAllFor(actor).find { it.text.contains(name) })
-          .orElseThrow { NoSuchElementException() }
-          .thenFind<WebElementFacade>(".canVote input").click()
+      return actor.attemptsTo(ClickOnPlayerUsedVote(name))
     }
 
     if (actor.abilityTo(AccessLocalRestAPI::class.java) != null) {

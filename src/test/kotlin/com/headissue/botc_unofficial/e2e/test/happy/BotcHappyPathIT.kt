@@ -95,7 +95,7 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
     storyTeller.attemptsTo(SetUpNewGameTable())
     storyTeller.attemptsTo(EnsureEmptyTableIsPresent())
   }
-
+/*
   @Test
   fun `2 when players join a table, the storyteller sees players have joined`() {
     `1 when storyteller opens a new table, table is without players`()
@@ -181,7 +181,7 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
     storyTeller.attemptsTo(DeclareGoodWins())
     storyTeller.should(seeThat(GoodWon(), `is`(true)))
   }
-
+*/
   @After
   fun tearDown() {
     Serenity.getWebdriverManager().closeCurrentDrivers()

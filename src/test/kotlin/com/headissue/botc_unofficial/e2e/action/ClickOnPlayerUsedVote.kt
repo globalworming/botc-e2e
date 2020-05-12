@@ -6,11 +6,11 @@ import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.Performable
 import net.serenitybdd.screenplay.actions.PerformOn
 
-open class ClickOnKillPlayer(val name: String) : Performable {
+open class ClickOnPlayerUsedVote(val name: String) : Performable {
   override fun <T : Actor> performAs(actor: T) {
     actor.attemptsTo(PerformOn.eachMatching(GameTable.grimoire.player, fun(it: WebElementFacade) {
       if (it.textContent.contains(name)) {
-        it.thenFind<WebElementFacade>(".dead input").click()
+        it.thenFind<WebElementFacade>(".canVote input").click()
       }
     }))
   }
