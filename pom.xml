@@ -106,9 +106,8 @@
                 <version>2.20</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <e2e.on.stage>${stage}</e2e.on.stage>
-                        <!--
                         <serenity.dry.run>true</serenity.dry.run>
+                        <!--
                         -->
                     </systemPropertyVariables>
                 </configuration>
@@ -150,16 +149,8 @@
                 <groupId>net.serenity-bdd.maven.plugins</groupId>
                 <artifactId>serenity-maven-plugin</artifactId>
                 <version>${serenity.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.serenity-bdd</groupId>
-                          <artifactId>serenity-single-page-report</artifactId>
-                        <version>${serenity.version}</version>
-                    </dependency>
-                </dependencies>
                 <configuration>
             <!--        <tags>${tags}</tags>   -->
-                    <reports>single-page-html</reports>
                     <outputDirectory>${project.basedir}/target/site/${stage}</outputDirectory>
                 </configuration>
                 <executions>

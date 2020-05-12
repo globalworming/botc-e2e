@@ -25,6 +25,7 @@ import com.headissue.botc_unofficial.e2e.question.PlayerCanVote
 import com.headissue.botc_unofficial.e2e.question.PlayerIsDead
 import com.headissue.botc_unofficial.e2e.question.PlayersAtTable
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.*
@@ -34,6 +35,7 @@ import net.thucydides.core.annotations.Issues
 import net.thucydides.core.annotations.Narrative
 import net.thucydides.core.annotations.Pending
 import net.thucydides.core.util.EnvironmentVariables
+import net.thucydides.junit.annotations.TestData
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.*
 import org.hamcrest.collection.IsIterableContainingInOrder
@@ -56,22 +58,31 @@ import org.junit.runners.MethodSorters.NAME_ASCENDING
   win/fail state.
 """])
 @FixMethodOrder(NAME_ASCENDING)
-@RunWith(SerenityRunner::class)
+@RunWith(SerenityParameterizedRunner::class)
 /**
  * test are numbered, so basic test run first. with junit @Rule or surefire skipAfterFailureCount you could
  * prevent execution of complex tests if the basics fail
  */
 // TODO try out parameterized again
-class BotcHappyPathIT {
+class BotcHappyPathIT(private val wePlayOn: Stage) {
+
+  companion object {
+    @JvmStatic
+    @TestData
+    fun data(): Collection<Array<Stage>> = listOf(
+        arrayOf(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS),
+        arrayOf(LOCAL_REST_API),
+        arrayOf(LOCAL_FRONTEND_INTEGRATED)
+    )
+  }
 
   private lateinit var storyTeller: Actor
   private lateinit var players: GroupOfActors
-  private lateinit var wePlayOn: Stage // LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS, LOCAL_REST_API, LOCAL_FRONTEND_INTEGRATED
   private lateinit var environmentVariables: EnvironmentVariables
 
   @Before
   fun setUp() {
-    wePlayOn = `set up stage`()
+    // wePlayOn = `set up stage`()
     val actors = Actors.forStage(wePlayOn)
     storyTeller = actors.storyTeller
     players = actors.players
@@ -125,6 +136,7 @@ class BotcHappyPathIT {
 
 
   @Test
+  @Pending
   fun `3 when storyteller starts first night, characters are randomly assigned`() {
     Assume.assumeThat(wePlayOn, anyOf(`is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)))
     `2 when players join a table, the storyteller sees players have joined`()
