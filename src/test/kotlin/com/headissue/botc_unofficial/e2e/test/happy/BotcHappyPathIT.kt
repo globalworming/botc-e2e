@@ -34,6 +34,8 @@ import net.serenitybdd.screenplay.questions.CountQuestion
 import net.thucydides.core.annotations.Issues
 import net.thucydides.core.annotations.Narrative
 import net.thucydides.core.annotations.Pending
+import net.thucydides.core.model.TestTag
+import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.junit.annotations.TestData
 import org.hamcrest.CoreMatchers.*
@@ -82,7 +84,6 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
 
   @Before
   fun setUp() {
-    // wePlayOn = `set up stage`()
     val actors = Actors.forStage(wePlayOn)
     storyTeller = actors.storyTeller
     players = actors.players
@@ -95,7 +96,7 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
     storyTeller.attemptsTo(SetUpNewGameTable())
     storyTeller.attemptsTo(EnsureEmptyTableIsPresent())
   }
-/*
+
   @Test
   fun `2 when players join a table, the storyteller sees players have joined`() {
     `1 when storyteller opens a new table, table is without players`()
@@ -181,7 +182,7 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
     storyTeller.attemptsTo(DeclareGoodWins())
     storyTeller.should(seeThat(GoodWon(), `is`(true)))
   }
-*/
+
   @After
   fun tearDown() {
     Serenity.getWebdriverManager().closeCurrentDrivers()
