@@ -157,7 +157,7 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
 
   @Pending
   @Test
-  fun `3 when storyteller starts next phase, abilities are marked as available agin`() {
+  fun `3 when storyteller starts next phase, abilities are marked as available again`() {
     Assume.assumeThat(wePlayOn, anyOf(
         `is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS),
         `is`(LOCAL_FRONTEND_INTEGRATED)
