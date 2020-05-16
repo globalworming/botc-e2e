@@ -4,6 +4,7 @@ import com.headissue.botc_unofficial.e2e.ability.SeeGrimoire
 import com.headissue.botc_unofficial.e2e.ability.SeeTownSquare
 import com.headissue.botc_unofficial.e2e.action.DeclareEvilWins
 import com.headissue.botc_unofficial.e2e.action.DeclareGoodWins
+import com.headissue.botc_unofficial.e2e.action.EnsureCharactersWereAssigned
 import com.headissue.botc_unofficial.e2e.action.EnsureEmptyTableIsPresent
 import com.headissue.botc_unofficial.e2e.action.EnsureInitialTownSquareIsDisplayed
 import com.headissue.botc_unofficial.e2e.action.JoinGame
@@ -16,17 +17,16 @@ import com.headissue.botc_unofficial.e2e.actor.Actors
 import com.headissue.botc_unofficial.e2e.actor.GroupOfActors
 import com.headissue.botc_unofficial.e2e.actor.Stage
 import com.headissue.botc_unofficial.e2e.actor.Stage.*
-import com.headissue.botc_unofficial.e2e.question.CharactersInPlay
 import com.headissue.botc_unofficial.e2e.question.EvilWon
 import com.headissue.botc_unofficial.e2e.question.GoodWon
 import com.headissue.botc_unofficial.e2e.question.ItIsDay
 import com.headissue.botc_unofficial.e2e.question.ItIsNight
+import com.headissue.botc_unofficial.e2e.question.NumberOfPlayersAtTable
 import com.headissue.botc_unofficial.e2e.question.PlayerCanVote
 import com.headissue.botc_unofficial.e2e.question.PlayerIsDead
 import com.headissue.botc_unofficial.e2e.question.PlayersAtTable
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
-import net.serenitybdd.junit.runners.SerenityRunner
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.*
 import net.serenitybdd.screenplay.GivenWhenThen.*
@@ -34,13 +34,10 @@ import net.serenitybdd.screenplay.questions.CountQuestion
 import net.thucydides.core.annotations.Issues
 import net.thucydides.core.annotations.Narrative
 import net.thucydides.core.annotations.Pending
-import net.thucydides.core.model.TestTag
-import net.thucydides.core.steps.StepEventBus
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.junit.annotations.TestData
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.*
-import org.hamcrest.collection.IsIterableContainingInOrder
 import org.hamcrest.core.IsCollectionContaining
 import org.junit.After
 import org.junit.Assume
@@ -102,7 +99,7 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
     players.forEach {
       it.attemptsTo(JoinGame())
     }
-    storyTeller.should(eventually(seeThat(CountQuestion(PlayersAtTable()), `is`(5))))
+    storyTeller.should(eventually(seeThat(NumberOfPlayersAtTable(), `is`(5))))
   }
 
 
@@ -136,15 +133,12 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
 
 
   @Test
-  @Pending
   fun `3 when storyteller starts first night, characters are randomly assigned`() {
-    Assume.assumeThat(wePlayOn, anyOf(`is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)))
+    Assume.assumeThat(wePlayOn, anyOf(`is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS), `is`(LOCAL_FRONTEND_INTEGRATED)))
     `2 when players join a table, the storyteller sees players have joined`()
     storyTeller.attemptsTo(StartGame())
     storyTeller.should(eventually(seeThat(ItIsNight(), `is`(true))))
-    storyTeller.should(seeThat(CharactersInPlay(), IsIterableContainingInOrder.contains(
-        "Slayer", "Librarian", "Spy", "Imp", "Empath"
-    )))
+    storyTeller.attemptsTo(EnsureCharactersWereAssigned())
   }
 
   @Test
@@ -153,6 +147,16 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
     storyTeller.attemptsTo(StartGame())
     storyTeller.attemptsTo(StartNextDay())
     storyTeller.should(eventually(seeThat(ItIsDay(), `is`(true))))
+  }
+
+  @Test
+  @Pending
+  fun `when storyteller declares they are open for nominations, players can nominate and revoke nominations`() {
+    `3 when storyteller starts first day, it is daytime`()
+    //storyTeller.attemptsTo(DeclareTheyAreOpenForNominations())
+    //player[1].remember(Memories.PLAYER_I_WANT_TO_NOMINATE, player[2].name)
+    //player[1].attemptsTo(NominatePlayer(player[2].name))
+    //player[1].should(eventually(seeThat(TheyNominated(player[2].name))
   }
 
   @Pending

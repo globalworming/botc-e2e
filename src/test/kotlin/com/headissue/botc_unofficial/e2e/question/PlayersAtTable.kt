@@ -22,7 +22,8 @@ class PlayersAtTable : QuestionWithDefaultSubject<List<Player>>() {
           val name = it.findBy<WebElementFacade>(".name").text
           val dead = it.findBy<WebElementFacade>(".dead input").isSelected
           val canVote = !dead || it.findBy<WebElementFacade>(".canVote input").isSelected
-          Player(name = name, dead = dead, canVote = canVote)
+          val character = it.findBy<WebElementFacade>(".isCharacter").value
+          Player(name = name, dead = dead, canVote = canVote, character = character)
         }
       }
       if (actor.abilityTo(SeeTownSquare::class.java) != null) {
