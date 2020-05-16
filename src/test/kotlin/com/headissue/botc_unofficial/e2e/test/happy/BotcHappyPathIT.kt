@@ -151,9 +151,9 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
 
   @Test
   @Pending
-  fun `when storyteller declares they are open for nominations, players can nominate and revoke nominations`() {
+  fun `when storyteller calls for nominations, players can nominate and revoke nominations`() {
     `3 when storyteller starts first day, it is daytime`()
-    //storyTeller.attemptsTo(DeclareTheyAreOpenForNominations())
+    //storyTeller.attemptsTo(CallsForNominations())
     //player[1].remember(Memories.PLAYER_I_WANT_TO_NOMINATE, player[2].name)
     //player[1].attemptsTo(NominatePlayer(player[2].name))
     //player[1].should(eventually(seeThat(TheyNominated(player[2].name))
