@@ -65,7 +65,6 @@ import org.junit.runners.MethodSorters.NAME_ASCENDING
  * test are numbered, so basic test run first. with junit @Rule or surefire skipAfterFailureCount you could
  * prevent execution of complex tests if the basics fail
  */
-// TODO try out parameterized again
 class BotcHappyPathIT(private val wePlayOn: Stage) {
 
   companion object {
