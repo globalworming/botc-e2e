@@ -2,6 +2,7 @@ package com.headissue.botc_unofficial.e2e.test.happy
 
 import com.headissue.botc_unofficial.e2e.ability.SeeGrimoire
 import com.headissue.botc_unofficial.e2e.ability.SeeTownSquare
+import com.headissue.botc_unofficial.e2e.action.CallForNominations
 import com.headissue.botc_unofficial.e2e.action.DeclareEvilWins
 import com.headissue.botc_unofficial.e2e.action.DeclareGoodWins
 import com.headissue.botc_unofficial.e2e.action.EnsureCharactersWereAssigned
@@ -10,6 +11,7 @@ import com.headissue.botc_unofficial.e2e.action.EnsureInitialTownSquareIsDisplay
 import com.headissue.botc_unofficial.e2e.action.JoinGame
 import com.headissue.botc_unofficial.e2e.action.KillPlayer
 import com.headissue.botc_unofficial.e2e.action.MarkPlayerUsedVote
+import com.headissue.botc_unofficial.e2e.action.NominatePlayer
 import com.headissue.botc_unofficial.e2e.action.SetUpNewGameTable
 import com.headissue.botc_unofficial.e2e.action.StartGame
 import com.headissue.botc_unofficial.e2e.action.StartNextDay
@@ -19,26 +21,24 @@ import com.headissue.botc_unofficial.e2e.actor.Stage
 import com.headissue.botc_unofficial.e2e.actor.Stage.*
 import com.headissue.botc_unofficial.e2e.question.EvilWon
 import com.headissue.botc_unofficial.e2e.question.GoodWon
+import com.headissue.botc_unofficial.e2e.question.IsNominated
 import com.headissue.botc_unofficial.e2e.question.ItIsDay
 import com.headissue.botc_unofficial.e2e.question.ItIsNight
 import com.headissue.botc_unofficial.e2e.question.NumberOfPlayersAtTable
 import com.headissue.botc_unofficial.e2e.question.PlayerCanVote
 import com.headissue.botc_unofficial.e2e.question.PlayerIsDead
-import com.headissue.botc_unofficial.e2e.question.PlayersAtTable
+import com.headissue.botc_unofficial.e2e.question.TheyNominated
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.junit.runners.SerenityParameterizedRunner
 import net.serenitybdd.screenplay.Actor
 import net.serenitybdd.screenplay.EventualConsequence.*
 import net.serenitybdd.screenplay.GivenWhenThen.*
-import net.serenitybdd.screenplay.questions.CountQuestion
 import net.thucydides.core.annotations.Issues
 import net.thucydides.core.annotations.Narrative
 import net.thucydides.core.annotations.Pending
 import net.thucydides.core.util.EnvironmentVariables
 import net.thucydides.junit.annotations.TestData
 import org.hamcrest.CoreMatchers.*
-import org.hamcrest.MatcherAssert.*
-import org.hamcrest.core.IsCollectionContaining
 import org.junit.After
 import org.junit.Assume
 import org.junit.Before
@@ -62,21 +62,16 @@ import org.junit.runners.MethodSorters.NAME_ASCENDING
  * test are numbered, so basic test run first. with junit @Rule or surefire skipAfterFailureCount you could
  * prevent execution of complex tests if the basics fail
  */
-class BotcHappyPathIT(private val wePlayOn: Stage) {
+class MvpIT(private val wePlayOn: Stage) {
 
   companion object {
     @JvmStatic
     @TestData
-    fun data(): Collection<Array<Stage>> = listOf(
-        arrayOf(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS),
-        arrayOf(LOCAL_REST_API),
-        arrayOf(LOCAL_FRONTEND_INTEGRATED)
-    )
+    fun data(): Collection<Array<Stage>> = values().map { arrayOf(it) }
   }
 
   private lateinit var storyTeller: Actor
   private lateinit var players: GroupOfActors
-  private lateinit var environmentVariables: EnvironmentVariables
 
   @Before
   fun setUp() {
@@ -150,13 +145,21 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
   }
 
   @Test
-  @Pending
-  fun `when storyteller calls for nominations, players can nominate and revoke nominations`() {
+  // fixme not part of mvp
+  fun `4 when storyteller calls for nominations, players can nominate`() {
+    Assume.assumeThat(wePlayOn, anyOf(
+        `is`(LOCAL_FRONTEND_WITH_MOCKED_INTEGRATIONS)
+    ))
     `3 when storyteller starts first day, it is daytime`()
-    //storyTeller.attemptsTo(CallsForNominations())
-    //player[1].remember(Memories.PLAYER_I_WANT_TO_NOMINATE, player[2].name)
-    //player[1].attemptsTo(NominatePlayer(player[2].name))
-    //player[1].should(eventually(seeThat(TheyNominated(player[2].name))
+    storyTeller.attemptsTo(CallForNominations())
+    players[1].attemptsTo(NominatePlayer(players[2].name))
+    players[1].should(eventually(seeThat(TheyNominated(players[2].name), `is`(true))))
+    storyTeller.should(eventually(seeThat(IsNominated(players[2].name).by(players[1].name), `is`(true))))
+
+    // later when voted concluded
+    //storyTeller.should(eventually(seeThat(PlayerUsedNomination(players[1].name), `is`(true))))
+    //players[1].should(eventually(seeThat(PlayerUsedNomination(players[1].name), `is`(true))))
+
   }
 
   @Pending
@@ -190,12 +193,4 @@ class BotcHappyPathIT(private val wePlayOn: Stage) {
   fun tearDown() {
     Serenity.getWebdriverManager().closeCurrentDrivers()
   }
-
-  private fun `set up stage`(): Stage {
-    val stage = environmentVariables.getProperty("e2e.on.stage")
-    assertThat("property \"e2e.on.stage\" must be defined and contain a valid value",
-        values().map { it.name }.toList(), IsCollectionContaining.hasItem(stage))
-    return valueOf(stage)
-  }
-
 }
